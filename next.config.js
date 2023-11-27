@@ -3,7 +3,7 @@ export default {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+        destination: `${process.env.API_URL}/:path*`,
       },
     ];
   },

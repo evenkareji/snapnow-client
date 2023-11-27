@@ -189,7 +189,7 @@ const SFollowDesc = styled_components__WEBPACK_IMPORTED_MODULE_1___default().dd.
 const FollowingInfo = ({
   following
 }) => {
-  const PUBLIC_FOLDER = process.env.NEXT_PUBLIC_PUBLIC_FOLDER;
+  const PUBLIC_FOLDER = process.env.PUBLIC_FOLDER;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(UserBorder, {
     children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx((next_link__WEBPACK_IMPORTED_MODULE_2___default()), {
       href: `/profile/${following[0].username}`,
@@ -875,7 +875,7 @@ async function getServerSideProps(context) {
   const {
     username
   } = context.query;
-  const response = await axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(`${"https://snapnow-server.onrender.com"}/users?username=${username}`);
+  const response = await axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(`${process.env.API_URL}/users?username=${username}`);
   return {
     props: {
       profileUser: response.data

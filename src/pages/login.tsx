@@ -26,7 +26,7 @@ const Login = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   const googleLogin = () => {
-    window.open(`${process.env.NEXT_PUBLIC_API_URL}/auth/google/', '_self`);
+    window.open('https://snapnow-server.onrender.com/auth/google/', '_self');
   };
   const [passwordShown, setPasswordShown] = useState(false);
 

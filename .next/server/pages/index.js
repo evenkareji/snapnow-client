@@ -17,7 +17,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([axio
 axios__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
 
 const getPosts = async () => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(`${"https://snapnow-server.onrender.com"}/posts`);
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(`${process.env.API_URL}/posts`);
   return response.data.sort((post1, post2) => {
     return new Date(post2.createdAt).valueOf() - new Date(post1.createdAt).valueOf();
   });

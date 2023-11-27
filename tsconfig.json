@@ -21,7 +21,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "files": ["./src/sample.ts", "src/sample.d.ts"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"

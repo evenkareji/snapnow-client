@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
-import { LoginForm } from '../components/atoms/LoginForm';
+import { BaseInput } from '../components/atoms/BaseInput';
 import { ErrorMessage } from '../components/atoms/ErrorMessage';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useRegister } from '../hooks/useRegister';
@@ -175,15 +175,15 @@ const SHead = styled.div`
   font-size: 24px;
   margin-bottom: 40px;
 `;
-const SName = styled(LoginForm)`
+const SName = styled(BaseInput)`
   /* margin-bottom: 18px; */
 `;
-const SEmail = styled(LoginForm)``;
+const SEmail = styled(BaseInput)``;
 
-const SPassword = styled(LoginForm)`
+const SPassword = styled(BaseInput)`
   /* margin-bottom: 18px; */
 `;
-const SPasswordConfirmation = styled(LoginForm)`
+const SPasswordConfirmation = styled(BaseInput)`
   outline: ${({ isError }) => isError && '#ed0303 auto 2px'};
 `;
 

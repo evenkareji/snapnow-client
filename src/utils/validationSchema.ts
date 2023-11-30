@@ -42,3 +42,15 @@ export const changePasswordValidationSchema = commonValidationSchema
       .min(6, 'パスワードは6文字以上で入力してください')
       .max(50, 'パスワードは50文字以下で入力してください'),
   });
+
+export const updateProfileValidationSchema = z.object({
+  username: z
+    .string()
+    .min(1, 'ユーザー名は1文字以上で入力してください')
+    .max(15, 'ユーザー名は15文字以下で入力してください')
+    .optional(),
+  description: z
+    .string()
+    .max(50, '自己紹介は50文字以下で入力してください')
+    .optional(),
+});

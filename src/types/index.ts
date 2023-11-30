@@ -3,6 +3,7 @@ export type User = {
   username: string;
 
   profileImg: string;
+  desc: string;
 
   followers: string[];
   followings: string[];

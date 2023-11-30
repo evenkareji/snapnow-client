@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '../hooks/useLogin';
 import { ErrorMessage } from '../components/atoms/ErrorMessage';
 import { Hr } from '../components/atoms/Hr';
-import { LoginForm } from '../components/atoms/LoginForm';
+import { BaseInput } from '../components/atoms/BaseInput';
 import { useRouter } from 'next/router';
 import { useSelector } from '../redux/store';
 import { useForm } from 'react-hook-form';
@@ -153,11 +153,11 @@ const SFormHead = styled.div`
   font-size: 24px;
   margin-bottom: 40px;
 `;
-const SEmail = styled(LoginForm)`
+const SEmail = styled(BaseInput)`
   margin-bottom: 14px;
 `;
 
-const SPassword = styled(LoginForm)``;
+const SPassword = styled(BaseInput)``;
 
 const SSubmit = styled.button`
   text-decoration: none;

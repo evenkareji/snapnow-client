@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-
 import { Card } from '../molecules/Card';
 import { Post } from '../../types';
+import useDeletePost from '../../hooks/useDeletePost';
 
 export const UserPostList = ({ username }) => {
   const [posts, setPosts] = useState<Array<Post>>([]);
-
+  const { handleDelete } = useDeletePost(setPosts);
   useEffect(() => {
     const fetchPosts = async () => {
       if (!username) {
@@ -31,7 +31,7 @@ export const UserPostList = ({ username }) => {
     <SPersonalPost>
       <SUserArea>
         {posts.map((post) => (
-          <Card post={post} key={post._id} />
+          <Card post={post} key={post._id} onDelete={handleDelete} />
         ))}
       </SUserArea>
     </SPersonalPost>

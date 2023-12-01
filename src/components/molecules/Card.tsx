@@ -1,63 +1,25 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-
-import { Post } from '../../types';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-
+import { useSelector } from 'react-redux';
+import { Post } from '../../types';
 // 分割代入の中でtypescriptの型宣言をしている
-export const Card: FC<{ post: Post }> = (props) => {
-  const { post } = props;
+type Props = {
+  post: Post;
+  onDelete: (string) => void;
+};
+export const Card: FC<Props> = ({ post, onDelete }) => {
   const router = useRouter();
-  // const [user, setUser] = useState<User>({
-  //   _id: '',
-  //   username: '',
-  //   email: '',
-  //   password: '',
-  //   profileImg: '',
-
-  //   followers: [],
-  //   followings: [],
-  //   isAdmin: false,
-
-  //   updatedAt: null,
-  // });
 
   const { username } = router.query;
-  const loginUser = useSelector((state: any) => state.user);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const response = await axios.get(
-  //       `http://localhost:8000/users?userId=${post.userId}`,
-  //     );
-
-  //     setUser(response.data);
-  //   };
-  //   fetchUser();
-  // }, [post.userId]);
-
-  const postDelete = async () => {
-    try {
-      if (window.confirm('本当に削除しますかー？いいの？ほんき？ええ！？')) {
-        await axios.delete(`/api/posts/${post._id}`, {
-          data: { userId: loginUser.user._id },
-        });
-        // 変更エラーが起きる
-        // window.location.reload();
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { user } = useSelector((state: any) => state.user);
 
   return (
     <SCard key={post._id}>
-      {loginUser.user.username === username && (
-        <SDeleteIcon onClick={postDelete} />
+      {user.username === username && (
+        <SDeleteIcon onClick={() => onDelete(post._id)} />
       )}
       <SProfileText key={post._id}>{post.desc}</SProfileText>
     </SCard>

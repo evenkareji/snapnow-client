@@ -13,9 +13,6 @@ const SendMailForm = ({ email, setError, Error, setVisible }) => {
   });
 
   const verifyCode = async (data) => {
-    console.log(data);
-    console.log(email, 'verifyCode');
-
     const { code } = data;
     console.log(code);
 

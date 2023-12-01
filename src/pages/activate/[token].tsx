@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import getToken from '../../utils/getToken';
 export async function getServerSideProps(context) {
   // URLクエリからtokenを取得
   const { token } = context.query;
@@ -13,11 +13,8 @@ export async function getServerSideProps(context) {
 }
 
 function Activate({ token }) {
-  const tokenValue = Cookies.get('token');
   const router = useRouter();
-
-  // 存在する場合のみJSON.parseを使用する
-  const loginToken = tokenValue ? JSON.parse(tokenValue) : null;
+  const loginToken = getToken();
 
   const activateAccount = async () => {
     try {

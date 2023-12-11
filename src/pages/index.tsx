@@ -109,7 +109,7 @@ const PostSlide = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  @media (min-width: 425px) {
+  @media (min-width: 466px) {
     & {
       max-width: 400px;
       width: 100%;

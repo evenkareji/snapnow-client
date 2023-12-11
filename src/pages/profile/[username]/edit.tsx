@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
+import React, { useEffect } from 'react';
 import { BaseInput } from '../../../components/atoms/BaseInput';
 import PrimaryBtn from '../../../components/atoms/PrimaryBtn';
 import { AppDispatch, useSelector } from '../../../redux/store';
 
-import { fetchInitialUser } from '../../../features/userSlice';
-import { useDispatch } from 'react-redux';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { UserIconImg } from '../../../components/atoms/UserIconImg';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { fetchInitialUser } from '../../../features/userSlice';
 import { updateProfileValidationSchema } from '../../../utils/validationSchema';
 
 const UpdateProfilePage = () => {
@@ -74,6 +74,7 @@ const UpdateProfilePage = () => {
   return (
     <div>
       <h2>プロフィールを編集</h2>
+
       <SForm onSubmit={handleSubmit(updateProfile)}>
         <SProfileImg src={user.profileImg} alt="" />
         <SInputBox>

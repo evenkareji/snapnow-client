@@ -13,6 +13,7 @@ import Layout from '../../../components/templates/Layout';
 import { fetchInitialUser } from '../../../features/userSlice';
 import { AppDispatch, useSelector } from '../../../redux/store';
 import RingLoader from 'react-spinners/RingLoader';
+import UserMenu from '../../../components/molecules/UserMenu';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -68,7 +69,8 @@ const ProfilePage = ({ profileUser }) => {
   }
 
   return (
-    <SProfileBox>
+    <SProfileBox style={{ overflow: 'hidden' }}>
+      <UserMenu />
       <SFollowTab
         isToPage={isToPage}
         toFollowsPage={toFollowsPage}
@@ -104,13 +106,16 @@ const ProfilePage = ({ profileUser }) => {
 const SFollowTab = styled(FollowTab)``;
 const SProfileBox = styled.div`
   position: relative;
-
-  flex: 1;
+  width: 100vw;
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    width: 80vw;
+  }
   @media (min-width: 768px) {
-    flex: 0.9;
+    /* flex: 0.9; */
+    margin-left: 20vw;
   }
   @media (min-width: 1264px) {
-    flex: 0.8;
   }
 
   background-color: #fafafa;

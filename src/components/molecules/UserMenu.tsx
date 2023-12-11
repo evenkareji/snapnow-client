@@ -1,47 +1,61 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import { Hr } from '../atoms/Hr';
+import { logout } from '../../features/userSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { useRouter } from 'next/router';
 
-const menuItems = {
-  account: [
-    {
-      icon: (
-        <PersonOutlineIcon style={{ marginRight: '16px', color: '#96979B' }} />
-      ),
-      label: 'プロフィール編集',
-      href: '/edit',
-    },
-  ],
-  aboutSnapNow: [
-    {
+const UserMenu = ({ username }) => {
+  const menuItems = {
+    account: [
+      {
+        icon: (
+          <PersonOutlineIcon
+            style={{ marginRight: '16px', color: '#96979B' }}
+          />
+        ),
+        label: 'プロフィール編集',
+        href: `/profile/${username}/edit`,
+      },
+    ],
+    aboutSnapNow: [
+      {
+        icon: <LogoutIcon style={{ marginRight: '16px', color: '#96979B' }} />,
+        label: '利用規約',
+        href: '/',
+      },
+      {
+        icon: <LogoutIcon style={{ marginRight: '16px', color: '#96979B' }} />,
+        label: 'プライバシーポリシー',
+        href: '/',
+      },
+    ],
+    logout: {
       icon: <LogoutIcon style={{ marginRight: '16px', color: '#96979B' }} />,
-      label: '利用規約',
-      href: '/',
+      label: 'ログアウト',
+      href: '/logout',
     },
-    {
-      icon: <LogoutIcon style={{ marginRight: '16px', color: '#96979B' }} />,
-      label: 'プライバシーポリシー',
-      href: '/',
-    },
-  ],
-  logout: {
-    icon: <LogoutIcon style={{ marginRight: '16px', color: '#96979B' }} />,
-    label: 'ログアウト',
-    href: '/logout',
-  },
-};
+  };
+  const dispatch: AppDispatch = useDispatch();
 
-const UserMenu = () => {
+  const router = useRouter();
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
-
+  const logoutEvent = useCallback(async () => {
+    try {
+      dispatch(logout());
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dispatch, router]);
   return (
     <>
       {/* Overlay background */}
@@ -106,19 +120,17 @@ const UserMenu = () => {
               ))}
               <Hr />
             </div>
-            <div>
-              <Link href={menuItems.logout.href}>
-                <SMenuContainer>
-                  <div>{menuItems.logout.icon}</div>
-                  <div>{menuItems.logout.label}</div>
-                </SMenuContainer>
-              </Link>
+            <div onClick={logoutEvent}>
+              <SMenuContainer>
+                <div>{menuItems.logout.icon}</div>
+                <div>{menuItems.logout.label}</div>
+              </SMenuContainer>
             </div>
           </div>
         </div>
       )}
 
-      <MoreHorizIcon onClick={toggleMenu} />
+      <SMoreHorizIcon onClick={toggleMenu} />
     </>
   );
 };
@@ -126,6 +138,13 @@ const UserMenu = () => {
 const SMenuContainer = styled.div`
   display: flex;
   margin-right: 16px;
+`;
+
+const SMoreHorizIcon = styled(MoreHorizIcon)`
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 export default UserMenu;

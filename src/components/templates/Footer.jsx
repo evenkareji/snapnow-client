@@ -37,7 +37,7 @@ const SFooter = styled.footer`
   display: flex;
   align-items: center;
   z-index: 1000000;
-  background-color: rgb(207, 175, 175);
+  background: #fff;
   width: 100%;
   justify-content: space-around;
   border-top: 1px solid #dbdbdb;

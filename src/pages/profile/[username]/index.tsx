@@ -69,8 +69,13 @@ const ProfilePage = ({ profileUser }) => {
   }
 
   return (
-    <SProfileBox style={{ overflow: 'hidden' }}>
-      <UserMenu />
+    <SProfileBox>
+      <SHeader>
+        <SHeaderInner>
+          <h1 style={{ fontSize: '16px' }}>プロフィール</h1>
+          <UserMenu username={username} />
+        </SHeaderInner>
+      </SHeader>
       <SFollowTab
         isToPage={isToPage}
         toFollowsPage={toFollowsPage}
@@ -103,6 +108,17 @@ const ProfilePage = ({ profileUser }) => {
     </SProfileBox>
   );
 };
+const SHeader = styled.header`
+  padding: 22px 0px 11px 0px;
+`;
+const SHeaderInner = styled.header`
+  text-align: center;
+  position: relative;
+  width: 93%;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 const SFollowTab = styled(FollowTab)``;
 const SProfileBox = styled.div`
   position: relative;

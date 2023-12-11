@@ -1,26 +1,25 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { Post } from '../../types';
-// 分割代入の中でtypescriptの型宣言をしている
+
 type Props = {
   post: Post;
-  onDelete: (string) => void;
+  onDelete: (postId: string) => void;
 };
+
 export const Card: FC<Props> = ({ post, onDelete }) => {
   const router = useRouter();
-
   const { username } = router.query;
   const { user } = useSelector((state: any) => state.user);
 
+  const isCurrentUser = user?.username === username;
+
   return (
     <SCard key={post._id}>
-      {user.username === username && (
-        <SDeleteIcon onClick={() => onDelete(post._id)} />
-      )}
+      {isCurrentUser && <SDeleteIcon onClick={() => onDelete(post._id)} />}
       <SProfileText key={post._id}>{post.desc}</SProfileText>
     </SCard>
   );

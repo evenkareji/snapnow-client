@@ -85,12 +85,16 @@ const SLogoutButton = styled.div`
 `;
 const SPostMain = styled.div`
   position: relative;
-  flex: 1;
+  width: 100vw;
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    width: 80vw;
+  }
   @media (min-width: 768px) {
-    flex: 0.9;
+    /* flex: 0.9; */
+    margin-left: 20vw;
   }
   @media (min-width: 1264px) {
-    flex: 0.8;
   }
 `;
 const PostBg = styled.div`

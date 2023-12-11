@@ -121,12 +121,16 @@ const AddPost = () => {
 };
 
 const SPostBox = styled.div`
-  flex: 1;
+  width: 100vw;
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    width: 80vw;
+  }
   @media (min-width: 768px) {
-    flex: 0.9;
+    /* flex: 0.9; */
+    margin-left: 20vw;
   }
   @media (min-width: 1264px) {
-    flex: 0.8;
   }
 `;
 const SUserIconImg = styled(UserIconImg)``;
@@ -185,8 +189,8 @@ const SSubmit = styled.button<{ isText: boolean }>`
 `;
 const SHr = styled.hr`
   border: 1px solid rgb(207, 217, 222);
-  margin-top: 52px;
-  margin-bottom: 42px;
+  /* margin-top: 52px;
+  margin-bottom: 42px; */
 `;
 
 AddPost.getLayout = function getLayout(page: ReactElement) {

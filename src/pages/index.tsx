@@ -1,11 +1,11 @@
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import { PostView } from '../components/organisms/PostView';
 import { useEffect } from 'react';
-import LogoutIcon from '@mui/icons-material/Logout';
+
 import { useDispatch } from 'react-redux';
 import { useSelector, AppDispatch } from '../redux/store';
-import { fetchInitialUser, logout } from '../features/userSlice';
+import { fetchInitialUser } from '../features/userSlice';
 import { useRouter } from 'next/router';
 import { getPosts } from '../api/getPosts';
 import Layout from '../components/templates/Layout';
@@ -38,14 +38,6 @@ const Home = ({
     }
   }, [user]);
 
-  const logoutEvent = useCallback(async () => {
-    try {
-      dispatch(logout());
-    } catch (err) {
-      console.log(err);
-    }
-  }, [dispatch, router]);
-
   if (loading) {
     return (
       <div className="loader-container">
@@ -56,10 +48,6 @@ const Home = ({
 
   return (
     <SPostMain>
-      <SLogoutButton onClick={logoutEvent}>
-        <LogoutIcon style={{ fontSize: '14px' }} />
-      </SLogoutButton>
-
       <PostBg>
         <PostSlide>
           {posts.map((post) => (
@@ -70,27 +58,19 @@ const Home = ({
     </SPostMain>
   );
 };
-const SLogoutButton = styled.div`
-  padding: 10px;
-  font-size: 12px;
-  border-radius: 15px;
-  text-align: center;
-  background: #dfdfdf;
-  color: #626161;
-  position: absolute;
-  top: 10%;
-  left: 20px;
-  cursor: pointer;
-  z-index: 10;
-`;
+
 const SPostMain = styled.div`
   position: relative;
-  flex: 1;
+  width: 100vw;
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    width: 80vw;
+  }
   @media (min-width: 768px) {
-    flex: 0.9;
+    /* flex: 0.9; */
+    margin-left: 20vw;
   }
   @media (min-width: 1264px) {
-    flex: 0.8;
   }
 `;
 const PostBg = styled.div`
@@ -109,12 +89,12 @@ const PostSlide = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  @media (min-width: 425px) {
+  @media (min-width: 466px) {
     & {
       max-width: 400px;
       width: 100%;
-      height: 95vh;
-      border-radius: 20px;
+      height: 100vh;
+      border-radius: 0px;
     }
   }
 

@@ -32,8 +32,8 @@ const SIconText = styled.small`
   flex: 1;
   width: 120px;
 
+  display: none;
   @media (min-width: 768px) {
-    display: none;
   }
   @media (min-width: 1264px) {
     display: block;

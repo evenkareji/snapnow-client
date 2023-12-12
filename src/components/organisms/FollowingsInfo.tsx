@@ -13,12 +13,14 @@ export const FollowingsInfo = () => {
 
   useEffect(() => {
     const getFollowers = async () => {
-      const response = await axios.get(`/api/users/followings/${user?._id}`);
-      setFollowings(response.data);
+      if (user && user._id) {
+        const response = await axios.get(`/api/users/followings/${user._id}`);
+        setFollowings(response.data);
+      }
     };
 
     !loading && getFollowers();
-  }, [user]);
+  }, [user, loading]);
 
   return (
     <SUsersContainer>
@@ -28,6 +30,7 @@ export const FollowingsInfo = () => {
     </SUsersContainer>
   );
 };
+
 const SUsersContainer = styled.div`
   width: 92%;
   margin: 0 auto;

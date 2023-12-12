@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
+import React, { useEffect } from 'react';
 import { BaseInput } from '../../../components/atoms/BaseInput';
 import PrimaryBtn from '../../../components/atoms/PrimaryBtn';
 import { AppDispatch, useSelector } from '../../../redux/store';
 
-import { fetchInitialUser } from '../../../features/userSlice';
-import { useDispatch } from 'react-redux';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { UserIconImg } from '../../../components/atoms/UserIconImg';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { fetchInitialUser } from '../../../features/userSlice';
 import { updateProfileValidationSchema } from '../../../utils/validationSchema';
 
 const UpdateProfilePage = () => {
@@ -72,9 +72,9 @@ const UpdateProfilePage = () => {
     }
   };
   return (
-    <div>
-      <h2>プロフィールを編集</h2>
+    <>
       <SForm onSubmit={handleSubmit(updateProfile)}>
+        <SHeadingForm>プロフィールを編集</SHeadingForm>
         <SProfileImg src={user.profileImg} alt="" />
         <SInputBox>
           <label htmlFor="username">名前</label>
@@ -102,12 +102,20 @@ const UpdateProfilePage = () => {
         </SInputBox>
         <SSaveProfileBtn>保存</SSaveProfileBtn>
       </SForm>
-    </div>
+    </>
   );
 };
 const SForm = styled.form`
   width: 93%;
   margin: 0 auto;
+  padding-top: 35px;
+`;
+const SHeadingForm = styled.h2`
+  margin: 0 auto 35px;
+  font-size: 24px;
+  font-weight: normal;
+  width: 100%;
+  max-width: 400px;
 `;
 const SProfileImg = styled(UserIconImg)`
   cursor: pointer;
@@ -125,7 +133,7 @@ const SProfileImg = styled(UserIconImg)`
 const SInputBox = styled.div`
   margin: 0 auto;
   width: 100%;
-  max-width: 480px;
+  max-width: 400px;
   margin-bottom: 21px;
 `;
 const SUpdateUserInput = styled(BaseInput)`
@@ -136,8 +144,8 @@ const SUpdateUserInput = styled(BaseInput)`
 
 const SSaveProfileBtn = styled(PrimaryBtn)`
   width: 100%;
-  max-width: 480px;
   border-radius: 8px;
+  max-width: 400px;
   height: 48px;
   display: block;
   margin: 0 auto;

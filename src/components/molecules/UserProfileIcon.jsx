@@ -23,12 +23,11 @@ export const UserProfileIcon = ({ isIcon /*changeIsIcon*/ }) => {
 const SIconText = styled.small`
   font-weight: ${({ isIcon }) => (isIcon ? '800' : 'normal')};
   letter-spacing: -0.1em;
-
+  display: none;
   @media (min-width: 432px) {
     letter-spacing: 0;
   }
   @media (min-width: 768px) {
-    display: none;
   }
   @media (min-width: 1264px) {
     width: 90px !important;

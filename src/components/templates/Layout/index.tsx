@@ -17,8 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
 };
 const SFlex = styled.div`
   position: relative;
-  display: flex;
-  /* flex-direction: row-reverse; */
   width: 100%;
+  height: 100%;
 `;
 export default Layout;

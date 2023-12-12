@@ -13,6 +13,11 @@ import Layout from '../../../components/templates/Layout';
 import { fetchInitialUser } from '../../../features/userSlice';
 import { AppDispatch, useSelector } from '../../../redux/store';
 import RingLoader from 'react-spinners/RingLoader';
+import UserMenu from '../../../components/organisms/UserMenu';
+import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
+import ProfileHeader from '../../../components/molecules/ProfileHeader';
+
+import Share from '../../../components/atoms/Share';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -69,6 +74,23 @@ const ProfilePage = ({ profileUser }) => {
 
   return (
     <SProfileBox>
+      <ProfileHeader
+        title={isPointer ? 'プロフィール' : `${username}`}
+        leftIcon={
+          isPointer ? (
+            ''
+          ) : (
+            <ArrowBackIosIconStyled onClick={() => router.back()} />
+          )
+        }
+        rightIcon={
+          isPointer ? (
+            <UserMenu username={username} />
+          ) : (
+            <Share username={username} />
+          )
+        }
+      />
       <SFollowTab
         isToPage={isToPage}
         toFollowsPage={toFollowsPage}
@@ -101,16 +123,20 @@ const ProfilePage = ({ profileUser }) => {
     </SProfileBox>
   );
 };
+
 const SFollowTab = styled(FollowTab)``;
 const SProfileBox = styled.div`
   position: relative;
-
-  flex: 1;
+  width: 100vw;
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    width: 80vw;
+  }
   @media (min-width: 768px) {
-    flex: 0.9;
+    /* flex: 0.9; */
+    margin-left: 20vw;
   }
   @media (min-width: 1264px) {
-    flex: 0.8;
   }
 
   background-color: #fafafa;
@@ -171,6 +197,7 @@ const SPadding = styled.div`
   padding-right: 3px;
   width: 100%;
 `;
+
 ProfilePage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

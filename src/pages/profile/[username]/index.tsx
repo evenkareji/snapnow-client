@@ -16,7 +16,8 @@ import RingLoader from 'react-spinners/RingLoader';
 import UserMenu from '../../../components/organisms/UserMenu';
 import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
 import ProfileHeader from '../../../components/molecules/ProfileHeader';
-import ShareIconStyled from '../../../components/atoms/ShareIcon';
+
+import Share from '../../../components/atoms/Share';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -83,7 +84,11 @@ const ProfilePage = ({ profileUser }) => {
           )
         }
         rightIcon={
-          isPointer ? <UserMenu username={username} /> : <ShareIconStyled />
+          isPointer ? (
+            <UserMenu username={username} />
+          ) : (
+            <Share username={username} />
+          )
         }
       />
       <SFollowTab

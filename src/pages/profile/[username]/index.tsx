@@ -14,6 +14,9 @@ import { fetchInitialUser } from '../../../features/userSlice';
 import { AppDispatch, useSelector } from '../../../redux/store';
 import RingLoader from 'react-spinners/RingLoader';
 import UserMenu from '../../../components/organisms/UserMenu';
+import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
+import ProfileHeader from '../../../components/molecules/ProfileHeader';
+import ShareIconStyled from '../../../components/atoms/ShareIcon';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -70,12 +73,19 @@ const ProfilePage = ({ profileUser }) => {
 
   return (
     <SProfileBox>
-      <SHeader>
-        <SHeaderInner>
-          <h1 style={{ fontSize: '16px' }}>プロフィール</h1>
-          <UserMenu username={username} />
-        </SHeaderInner>
-      </SHeader>
+      <ProfileHeader
+        title={isPointer ? 'プロフィール' : `${username}`}
+        leftIcon={
+          isPointer ? (
+            ''
+          ) : (
+            <ArrowBackIosIconStyled onClick={() => router.back()} />
+          )
+        }
+        rightIcon={
+          isPointer ? <UserMenu username={username} /> : <ShareIconStyled />
+        }
+      />
       <SFollowTab
         isToPage={isToPage}
         toFollowsPage={toFollowsPage}
@@ -108,16 +118,6 @@ const ProfilePage = ({ profileUser }) => {
     </SProfileBox>
   );
 };
-const SHeader = styled.header`
-  padding: 22px 0px 11px 0px;
-`;
-const SHeaderInner = styled.header`
-  text-align: center;
-  position: relative;
-  width: 93%;
-  margin-left: auto;
-  margin-right: auto;
-`;
 
 const SFollowTab = styled(FollowTab)``;
 const SProfileBox = styled.div`
@@ -192,6 +192,7 @@ const SPadding = styled.div`
   padding-right: 3px;
   width: 100%;
 `;
+
 ProfilePage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

@@ -13,7 +13,7 @@ import Layout from '../../../components/templates/Layout';
 import { fetchInitialUser } from '../../../features/userSlice';
 import { AppDispatch, useSelector } from '../../../redux/store';
 import RingLoader from 'react-spinners/RingLoader';
-import UserMenu from '../../../components/molecules/UserMenu';
+import UserMenu from '../../../components/organisms/UserMenu';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;

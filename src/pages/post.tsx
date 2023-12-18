@@ -83,6 +83,7 @@ const AddPost = () => {
                     setValue('desc', e.target.value);
                   }}
                   placeholder="50文字以内で入力してください"
+                  autoFocus={true}
                 ></TextArea>
                 <p
                   style={{
@@ -125,6 +126,7 @@ const SOverlay = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 10;
   }
+  overflow: hidden;
 `;
 
 const SPostBox = styled.div`
@@ -168,7 +170,7 @@ const SArrowBox = styled.div`
 const SPostMain = styled.div`
   width: 100%;
   @media (max-width: 520px) {
-    padding-top: 40%;
+    height: 90vh;
   }
   padding-top: 40%;
 

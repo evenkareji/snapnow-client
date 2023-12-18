@@ -6,15 +6,16 @@ export const TextArea = styled.textarea`
       font-size: 18px;
     }
   }
-  padding: 14px 3px;
+
   width: 100%;
   max-width: 500px;
   font-size: 24px;
   resize: none;
   border: none;
   outline: none;
-  height: auto;
-  min-height: 122px;
+  height: 80%;
+
+  min-height: 222px;
   &::placeholder {
     color: #ce936c;
   }

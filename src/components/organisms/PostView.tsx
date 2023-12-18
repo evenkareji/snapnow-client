@@ -69,7 +69,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
           </Box>
         </SPostHeader>
         <SDescContainer>
-          <SPostArticle>{post.desc}</SPostArticle>
+          <SPostArticle post={post.img}>{post.desc}</SPostArticle>
         </SDescContainer>
       </SPostContent>
       <SAside>
@@ -106,12 +106,13 @@ const SDescContainer = styled.div`
 `;
 const SPostArticle = styled.p`
   font-size: 24px;
+  width: fit-content;
   color: #000;
 
   font-weight: normal;
   line-height: 1.5em;
-  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
 `;
+
 const Box = styled.div`
   margin-left: 20px;
 `;

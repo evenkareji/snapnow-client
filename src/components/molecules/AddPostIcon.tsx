@@ -4,7 +4,7 @@ import { Icon } from '../atoms/Icon';
 
 export const AddPostIcon = () => {
   return (
-    <Icon link={'/add-post'}>
+    <Icon link={'/post'}>
       <ButtonContainer>
         <PlusSign />
       </ButtonContainer>

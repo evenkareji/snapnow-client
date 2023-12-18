@@ -125,6 +125,7 @@ const SOverlay = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 10;
   }
+  overflow: hidden;
 `;
 
 const SPostBox = styled.div`
@@ -168,7 +169,7 @@ const SArrowBox = styled.div`
 const SPostMain = styled.div`
   width: 100%;
   @media (max-width: 520px) {
-    padding-top: 40%;
+    height: 90vh;
   }
   padding-top: 40%;
 

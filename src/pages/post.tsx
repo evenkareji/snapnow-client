@@ -15,21 +15,17 @@ const AddPost = () => {
   const [isText, setIsText] = useState(false);
   const [isLoadingSubmission, setIsLoadingSubmission] =
     useState<boolean>(false);
-
   const { register, handleSubmit, watch, setValue } = useForm();
-
   let descWatch = watch('desc', '');
   useEffect(() => {
     const maxText = 50;
     const textLength = descWatch.trim().length;
     setIsText(textLength > 0 && textLength <= maxText);
   }, [descWatch, setIsText]);
-
   const { AddPost } = useAddPost(setIsLoadingSubmission);
   const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.user);
-
   useEffect(() => {
     dispatch(fetchInitialUser());
   }, []);
@@ -38,44 +34,46 @@ const AddPost = () => {
       router.push('/login');
     }
   }, [user]);
-
   const handleAddPost = ({ desc }) => AddPost(desc);
-
   const textLimit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxText = 50;
-
     const textLength = e.target.value.trim().length;
-
     setIsText(textLength > 0 && textLength <= maxText);
   };
   const handleOverlayClick = () => {
     router.back();
   };
-
   const handlePostBoxClick = (event) => {
     event.stopPropagation();
   };
-
   if (loading) {
     return (
       <div className="loader-container">
-        <RingLoader color="#ed6103" loading={true} size={50} />
+        {' '}
+        <RingLoader color="#ed6103" loading={true} size={50} />{' '}
       </div>
     );
   }
-
   return (
     <SOverlay onClick={handleOverlayClick}>
+      {' '}
       <SPostBox onClick={handlePostBoxClick}>
+        {' '}
         <SPostInner>
+          {' '}
           <SPostHeader>
+            {' '}
             <SArrowBox onClick={handleOverlayClick}>
-              <ArrowBackIosIcon />
-            </SArrowBox>
-          </SPostHeader>
+              {' '}
+              <ArrowBackIosIcon />{' '}
+            </SArrowBox>{' '}
+          </SPostHeader>{' '}
           <SPostMain>
+            {' '}
             <SLabel htmlFor="textForm">
+              {' '}
               <SForm method="post" onSubmit={handleSubmit(handleAddPost)}>
+                {' '}
                 <TextArea
                   {...register('desc')}
                   onChange={(e) => {
@@ -84,35 +82,36 @@ const AddPost = () => {
                   }}
                   placeholder="50文字以内で入力してください"
                   autoFocus={true}
-                ></TextArea>
+                ></TextArea>{' '}
                 <p
                   style={{
                     textAlign: 'right',
                     color: descWatch.length > 50 ? 'red' : '#080808',
                   }}
                 >
-                  {descWatch.length}/50
-                </p>
+                  {' '}
+                  {descWatch.length}/50{' '}
+                </p>{' '}
                 <SPostButton
                   type="submit"
                   isText={isText}
                   disabled={isLoadingSubmission}
                 >
+                  {' '}
                   {isLoadingSubmission ? (
                     <PulseLoader color="#fff" size={5} />
                   ) : (
                     <SendIcon />
-                  )}
-                </SPostButton>
-              </SForm>
-            </SLabel>
-          </SPostMain>
-        </SPostInner>
-      </SPostBox>
+                  )}{' '}
+                </SPostButton>{' '}
+              </SForm>{' '}
+            </SLabel>{' '}
+          </SPostMain>{' '}
+        </SPostInner>{' '}
+      </SPostBox>{' '}
     </SOverlay>
   );
 };
-
 const SOverlay = styled.div`
   @media (min-width: 520px) {
     position: fixed;
@@ -128,7 +127,6 @@ const SOverlay = styled.div`
   }
   overflow: hidden;
 `;
-
 const SPostBox = styled.div`
   border-radius: 20px;
   max-width: 520px;
@@ -138,14 +136,10 @@ const SPostBox = styled.div`
   min-height: 600px;
   height: 70%;
 `;
-
 const SLabel = styled.label`
   display: block;
-
   width: 100%;
-
-  background-color: #fff;
-  /* padding: 32px 0 72px; */
+  background-color: #fff; /* padding: 32px 0 72px; */
 `;
 const SForm = styled.form`
   position: relative;
@@ -166,23 +160,19 @@ const SArrowBox = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
 const SPostMain = styled.div`
   width: 100%;
   @media (max-width: 520px) {
     height: 90vh;
   }
   padding-top: 40%;
-
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
 const SPostInner = styled.div`
   height: 70%;
   max-height: 700px;
-
   width: 92%;
   margin: 0 auto;
   padding: 20px 0px 46px;
@@ -192,11 +182,9 @@ const SPostInner = styled.div`
 const SPostHeader = styled.header`
   background-color: #fff;
 `;
-
 const SPostButton = styled.button`
   background-color: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5); /* Adjust the alpha value as needed */
-
   color: #ff772a;
   border: none;
   border-radius: 50%;
@@ -204,16 +192,13 @@ const SPostButton = styled.button`
   height: 40px;
   font-size: 16px;
   padding-top: 6px;
-
   display: block;
   cursor: pointer;
   margin-left: auto;
   position: relative;
   z-index: 1000000;
-
   &:hover {
     opacity: 0.7;
   }
 `;
-
 export default AddPost;

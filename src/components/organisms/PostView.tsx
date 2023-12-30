@@ -59,14 +59,13 @@ export const PostView: FC<{ post: Post }> = (props) => {
           </Link>
           <Box>
             <SUserName>{user?.username}</SUserName>
-
-            <FollowToggleButton
-              loginUser={loginUser}
-              postUserId={post.userId}
-              onClickFollow={onClickFollow}
-              onClickUnFollow={onClickUnFollow}
-            />
           </Box>
+          <FollowToggleButton
+            loginUser={loginUser}
+            postUserId={post.userId}
+            onClickFollow={onClickFollow}
+            onClickUnFollow={onClickUnFollow}
+          />
         </SPostHeader>
         <SDescContainer>
           <SPostArticle post={post.img}>{post.desc}</SPostArticle>
@@ -87,34 +86,39 @@ const SHeartBox = styled.div`
 `;
 const SPostContent = styled.div`
   position: absolute;
-  top: 25%;
+  top: 55px;
   left: 38px;
-  width: 74%;
+  width: 87%;
   height: 70%;
 `;
 const SPostHeader = styled.header`
   display: flex;
-  align-items: start;
+  align-items: center;
+  position: relative;
+  justify-content: space-between; // 左端と右端に要素を配置
+  height: 72px;
 `;
 
 const SDescContainer = styled.div`
-  height: 50%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: left;
 `;
 const SPostArticle = styled.p`
-  font-size: 24px;
+  font-size: 26px;
   width: fit-content;
   color: #000;
 
   font-weight: normal;
-  line-height: 1.5em;
+  line-height: 1.9; /* 1.3倍が基準ですが、50%の値に基づいて適切に設定します */
+  letter-spacing: 0.1em;
 `;
 
 const Box = styled.div`
   margin-left: 20px;
+  flex: 1;
 `;
 
 const SUserIconImg = styled.img`
@@ -136,7 +140,7 @@ const SAside = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 62%;
+  top: 75%;
   align-items: center;
   right: 10px;
   padding: 20px;
@@ -145,7 +149,7 @@ const SAside = styled.div`
 
 const HeartCount = styled.span`
   margin-bottom: 18px;
-  color: #000;
+  color: #3d3d3d;
 `;
 
 const PostBorder = styled.div`

@@ -13,6 +13,7 @@ import { fetchInitialUser } from '../features/userSlice';
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/router';
 import { getFollowingsPosts } from '../api/getFollowingsPosts';
+import { useFollowingsPosts } from '../hooks/useFollowingsPosts';
 
 export const getServerSideProps: GetServerSideProps<{
   posts: Post[];
@@ -28,6 +29,7 @@ const Home = ({
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
   const [posts, setPosts] = useState(initialPosts); // 投稿の状態を管理
+  const { getFollowingsPosts } = useFollowingsPosts();
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -44,6 +46,8 @@ const Home = ({
   const fetchPosts = async () => {
     try {
       const response = await getFollowingsPosts(user?._id);
+      console.log(response);
+
       setPosts(response);
     } catch (error) {
       console.error('APIの取得に失敗しました。', error);

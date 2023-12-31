@@ -12,7 +12,6 @@ import { AppDispatch, useSelector } from '../redux/store';
 import { fetchInitialUser } from '../features/userSlice';
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/router';
-import { getFollowingsPosts } from '../api/getFollowingsPosts';
 import { useFollowingsPosts } from '../hooks/useFollowingsPosts';
 
 export const getServerSideProps: GetServerSideProps<{

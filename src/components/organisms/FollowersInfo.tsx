@@ -8,15 +8,13 @@ import { useSelector } from '../../redux/store';
 
 export const FollowersInfo = () => {
   const [followers, setFollowers] = useState<Array<User>>([]);
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
   useEffect(() => {
     const getFollowers = async () => {
-      const response = await axios.get(
-        `http://localhost:8000/users/followers/${user?._id}`,
-      );
+      const response = await axios.get(`/api/users/followers/${user?._id}`);
       setFollowers(response.data);
     };
-    getFollowers();
+    !loading && getFollowers();
   }, []);
 
   return (

@@ -5,17 +5,10 @@ import Link from 'next/link';
 import { UserIconImg } from '../atoms/UserIconImg';
 
 export const FollowingInfo = ({ following }) => {
-  const PUBLIC_FOLDER = process.env.PUBLIC_FOLDER;
   return (
     <UserBorder key={following[0]._id}>
       <Link href={`/profile/${following[0].username}`}>
-        <SFollowImg
-          src={
-            following[0].profileImg
-              ? PUBLIC_FOLDER + following[0].profileImg
-              : PUBLIC_FOLDER + '/person/noAvatar.png'
-          }
-        />
+        <SFollowImg src={following[0].profileImg} />
       </Link>
       <SFollowContainer>
         <SFollowName>{following[0].username}</SFollowName>

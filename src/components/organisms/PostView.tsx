@@ -77,6 +77,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
         </SHeartBox>
         <HeartCount>{post.likes.length}</HeartCount>
       </SAside>
+      <p>heasflikdhif;k.dhasK</p>
     </PostBorder>
   );
 };

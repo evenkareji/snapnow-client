@@ -90,8 +90,7 @@ const UserMenu = ({ username }) => {
             right: '0',
             bottom: '0',
             position: 'fixed',
-            display: 'block', // Toggle this based on menu visibility
-            borderRadius: '8px 0px 0px 0px',
+            display: 'block',
           }}
         >
           <div

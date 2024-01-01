@@ -41,11 +41,9 @@ const Home = ({
     }
   }, [user]);
 
-  // タブが選択されたときのハンドラ
   const fetchPosts = async () => {
     try {
       const response = await getFollowingsPosts(user?._id);
-      console.log(response);
 
       setPosts(response);
     } catch (error) {

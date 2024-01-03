@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { FollowerInfo } from '../molecules/FollowerInfo';
 import { User } from '../../types';
 import { useSelector } from '../../redux/store';
+import { UserListItem } from '../molecules/FollowingInfo';
 
 export const FollowersInfo = () => {
   const [followers, setFollowers] = useState<Array<User>>([]);
@@ -20,7 +20,7 @@ export const FollowersInfo = () => {
   return (
     <SUsersContainer>
       {followers.map((follower) => (
-        <FollowerInfo follower={follower} key={follower._id} />
+        <UserListItem user={follower} key={follower._id} />
       ))}
     </SUsersContainer>
   );

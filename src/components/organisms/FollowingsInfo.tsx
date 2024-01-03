@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { FollowingInfo } from '../molecules/FollowingInfo';
+import { UserListItem } from '../molecules/FollowingInfo';
 import { User } from '../../types';
 import { useSelector } from '../../redux/store';
 
@@ -25,7 +25,7 @@ export const FollowingsInfo = () => {
   return (
     <SUsersContainer>
       {followings.map((following) => (
-        <FollowingInfo following={following} key={following._id} />
+        <UserListItem user={following} key={following._id} />
       ))}
     </SUsersContainer>
   );

@@ -6,12 +6,12 @@ import { UserIconImg } from '../atoms/UserIconImg';
 
 export const FollowerInfo = ({ follower }) => {
   return (
-    <UserBorder key={follower[0]._id}>
-      <Link href={`/profile/${follower[0].username}`}>
-        <SFollowImg src={follower[0].profileImg} />
+    <UserBorder key={follower._id}>
+      <Link href={`/profile/${follower.username}`}>
+        <SFollowImg src={follower.profileImg} />
       </Link>
       <SFollowContainer>
-        <SFollowName>{follower[0].username}</SFollowName>
+        <SFollowName>{follower.username}</SFollowName>
         <SFollowDesc></SFollowDesc>
       </SFollowContainer>
       {/* <SOnFollowButton>押せません</SOnFollowButton> */}

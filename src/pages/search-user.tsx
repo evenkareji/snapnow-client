@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { searchUser } from './functions/user';
+import { FollowingInfo } from '../components/molecules/FollowingInfo';
 
 const SerachUser = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,8 +13,6 @@ const SerachUser = () => {
       setSearchResults(res);
     }
   };
-
-  console.log(searchResults);
 
   return (
     <>
@@ -32,10 +31,7 @@ const SerachUser = () => {
         {searchResults &&
           searchResults.map(
             (user: { _id: string; username: string; profileImg: string }) => (
-              <div>
-                <img src={user.profileImg} alt="" />
-                <span>{user.username}</span>
-              </div>
+              <FollowingInfo following={user} key={user._id} />
             ),
           )}
       </div>

@@ -5,13 +5,15 @@ import Link from 'next/link';
 import { UserIconImg } from '../atoms/UserIconImg';
 
 export const FollowingInfo = ({ following }) => {
+  console.log(following.username);
+
   return (
-    <UserBorder key={following[0]._id}>
-      <Link href={`/profile/${following[0].username}`}>
-        <SFollowImg src={following[0].profileImg} />
+    <UserBorder key={following._id}>
+      <Link href={`/profile/${following.username}`}>
+        <SFollowImg src={following.profileImg} />
       </Link>
       <SFollowContainer>
-        <SFollowName>{following[0].username}</SFollowName>
+        <SFollowName>{following.username}</SFollowName>
         <SFollowDesc></SFollowDesc>
       </SFollowContainer>
       {/* <SOnFollowButton>押せません</SOnFollowButton> */}

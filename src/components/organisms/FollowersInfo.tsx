@@ -20,7 +20,7 @@ export const FollowersInfo = () => {
   return (
     <SUsersContainer>
       {followers.map((follower) => (
-        <FollowerInfo follower={follower} key={follower[0]._id} />
+        <FollowerInfo follower={follower} key={follower._id} />
       ))}
     </SUsersContainer>
   );

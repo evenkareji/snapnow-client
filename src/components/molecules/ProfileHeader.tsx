@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface ProfileHeaderProps {
-  title: string;
+  title: string | React.ReactNode;
   leftIcon: React.ReactNode;
-  rightIcon: React.ReactNode;
+  rightIcon: string | React.ReactNode;
 }
 
 const SHeaderInner = styled.header`
@@ -17,17 +17,25 @@ const SHeaderInner = styled.header`
 `;
 const SHeader = styled.header`
   padding: 22px 0px 11px 0px;
+  align-items: center;
 `;
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   title,
   leftIcon,
   rightIcon,
 }) => {
+  const renderedTitle =
+    typeof title === 'string' ? (
+      <h1 style={{ fontSize: '16px' }}>{title}</h1>
+    ) : (
+      title
+    );
+
   return (
     <SHeader>
       <SHeaderInner>
         {leftIcon}
-        <h1 style={{ fontSize: '16px' }}>{title}</h1>
+        {renderedTitle}
         {rightIcon}
       </SHeaderInner>
     </SHeader>

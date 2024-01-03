@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { User } from '../../types';
 import { useSelector } from '../../redux/store';
-import { UserListItem } from '../molecules/FollowingInfo';
+import { UserListItem } from '../molecules/UserListItem';
 
 export const FollowersInfo = () => {
   const [followers, setFollowers] = useState<Array<User>>([]);
@@ -16,6 +16,8 @@ export const FollowersInfo = () => {
     };
     !loading && getFollowers();
   }, []);
+
+  console.log(followers, 'alluser');
 
   return (
     <SUsersContainer>

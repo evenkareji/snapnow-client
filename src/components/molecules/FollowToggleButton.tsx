@@ -5,19 +5,21 @@ import { FollowingButton } from '../atoms/FollowingButton';
 
 export const FollowToggleButton: React.FC<{
   loginUser: User;
-  postUserId: string;
+  otherUserId: string;
   onClickFollow: () => void;
   onClickUnFollow: () => void;
-}> = React.memo(({ loginUser, postUserId, onClickFollow, onClickUnFollow }) => {
-  if (!loginUser || loginUser._id === postUserId) return null;
+}> = React.memo(
+  ({ loginUser, otherUserId, onClickFollow, onClickUnFollow }) => {
+    if (!loginUser || loginUser._id === otherUserId) return null;
 
-  const isFollowing = loginUser.followings?.includes(postUserId);
+    const isFollowing = loginUser.followings?.includes(otherUserId);
 
-  return isFollowing ? (
-    <FollowingButton onClickUnFollow={onClickUnFollow}>
-      フォロー中
-    </FollowingButton>
-  ) : (
-    <FollowButton onClickFollow={onClickFollow}>フォロー</FollowButton>
-  );
-});
+    return isFollowing ? (
+      <FollowingButton onClickUnFollow={onClickUnFollow}>
+        フォロー中
+      </FollowingButton>
+    ) : (
+      <FollowButton onClickFollow={onClickFollow}>フォロー</FollowButton>
+    );
+  },
+);

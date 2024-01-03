@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { UserListItem } from '../molecules/FollowingInfo';
+import { UserListItem } from '../molecules/UserListItem';
 import { User } from '../../types';
 import { useSelector } from '../../redux/store';
 

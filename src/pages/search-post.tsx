@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { searchPost } from './functions/post';
+import { searchPost } from '../functions/post';
 import { PostView } from '../components/organisms/PostView';
 import styled from '@emotion/styled';
 import { AppDispatch, useSelector } from '../redux/store';
@@ -8,6 +8,10 @@ import { useDispatch } from 'react-redux';
 import { fetchInitialUser } from '../features/userSlice';
 import { ClipLoader } from 'react-spinners';
 import Layout from '../components/templates/Layout';
+import ProfileHeader from '../components/molecules/ProfileHeader';
+import { SearchForm } from '../components/atoms/SerachForm';
+import ArrowBackIosIconStyled from '../components/atoms/ArrowBackIcon';
+import SearchBtn from '../components/atoms/SearchBtn';
 
 const SerachPost = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,21 +49,24 @@ const SerachPost = () => {
 
   return (
     <>
-      <div style={{ position: 'relative', zIndex: '1000000' }}>
-        <div>SerachPost</div>
-        <input
-          placeholder="投稿検索"
-          type="text"
-          onKeyUp={searchHandler}
-          value={searchTerm}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchTerm(e.target.value);
-          }}
-        />
-      </div>
-      {searchTerm && (
+      <ProfileHeader
+        title={
+          <SearchForm
+            placeholder="投稿を検索"
+            searchHandler={searchHandler}
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            width={'71%'}
+          />
+        }
+        leftIcon={<ArrowBackIosIconStyled onClick={() => router.back()} />}
+        rightIcon={<SearchBtn />}
+      />
+      {searchTerm != '' && searchResults.length === 0 ? (
+        <p>{`「${searchTerm}」に一致する投稿が存在しません`}</p>
+      ) : (
         <SPostMain>
-          <PostBg>
+          <PostBg style={{ backgroundColor: '#fff' }}>
             <PostSlide>
               {searchResults.map((post) => (
                 <PostView post={post} key={post['_id']} />

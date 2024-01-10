@@ -12,6 +12,7 @@ import { useSelector } from '../redux/store';
 import { useForm } from 'react-hook-form';
 import { SignInData } from '../types';
 import { loginValidationSchema } from '../utils/validationSchema';
+import { PulseLoader } from 'react-spinners';
 
 const Login = () => {
   const {
@@ -21,7 +22,7 @@ const Login = () => {
   } = useForm<SignInData>({
     resolver: zodResolver(loginValidationSchema),
   });
-  const { loginSubmit, isError } = useLogin();
+  const { loginSubmit, isError, loginLoading } = useLogin();
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
 
@@ -76,7 +77,13 @@ const Login = () => {
                 メールアドレスかパスワードが間違っています
               </SErrorMessage>
             )}
-            <SSubmit type="submit">ログイン</SSubmit>
+            <SSubmit type="submit">
+              {loginLoading ? (
+                <PulseLoader color="#fff" size={5} />
+              ) : (
+                'ログイン'
+              )}
+            </SSubmit>
             <button onClick={() => googleLogin()} type="button">
               googleでログイン
             </button>

@@ -22,7 +22,7 @@ export const UserListItem = ({ user }) => {
     () => unFollowUser(user._id, loginUser?._id),
     [user._id, loginUser?._id, unFollowUser],
   );
-  if (!loginUser || !user) return;
+  if (!loginUser || !user) return null;
 
   return (
     <UserBorder key={user._id}>

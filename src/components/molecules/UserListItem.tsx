@@ -11,7 +11,6 @@ import { useUnFollow } from '../../hooks/useUnFollow';
 export const UserListItem = ({ user }) => {
   const { user: loginUser } = useSelector((state) => state.user);
 
-  if (!loginUser || !user) return;
   const { followUser } = useFollow();
   const { unFollowUser } = useUnFollow();
 
@@ -23,6 +22,7 @@ export const UserListItem = ({ user }) => {
     () => unFollowUser(user._id, loginUser?._id),
     [user._id, loginUser?._id, unFollowUser],
   );
+  if (!loginUser || !user) return;
 
   return (
     <UserBorder key={user._id}>

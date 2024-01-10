@@ -39,9 +39,9 @@ const SArrowBackIosNewIconBox = styled.div`
   max-width: 680px;
 `;
 const SArrowBackIosNewIcon = styled(ArrowBackIosNewIcon)`
-  width: 92%;
   max-width: 680px;
   margin: 0 auto 20px;
+  cursor: pointer;
 `;
 const SBox = styled.div`
   padding-top: 22px;

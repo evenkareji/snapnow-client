@@ -20,15 +20,15 @@ export const UserIconWithName = ({ profileUser }) => {
       profileUpload(image);
     }
   }, [image]);
-
+  const canUpload = user?.username === profileUser.username && !loading;
   return (
     <>
       <SLabel htmlFor="profile_image">
-        <SProfileImg src={profileUser.profileImg} />
+        <SProfileImg src={profileUser.profileImg} canUpload={canUpload} />
         {loading ? (
           <SClipLoader color="#ed6103" loading={true} size={25} />
         ) : (
-          <SAddCircleIcon />
+          canUpload && <SAddCircleIcon />
         )}
 
         <input
@@ -36,6 +36,7 @@ export const UserIconWithName = ({ profileUser }) => {
           id="profile_image"
           name="profile_image"
           hidden
+          disabled={!canUpload}
           accept="image/jpeg,image/png,image/gif,image/webp"
           onChange={(e) => handleImages(e, setImage)}
         />
@@ -81,6 +82,7 @@ const SProfileImg = styled(UserIconImg)`
   width: 160px;
   height: 160px;
   margin: 0 auto;
+  cursor: ${({ canUpload }) => (canUpload ? 'pointer' : 'not-allowed')};
   @media (min-width: 425px) {
     & {
       width: 180px;

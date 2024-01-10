@@ -49,31 +49,22 @@ const AddPost = () => {
   if (loading) {
     return (
       <div className="loader-container">
-        {' '}
         <RingLoader color="#ed6103" loading={true} size={50} />{' '}
       </div>
     );
   }
   return (
     <SOverlay onClick={handleOverlayClick}>
-      {' '}
       <SPostBox onClick={handlePostBoxClick}>
-        {' '}
         <SPostInner>
-          {' '}
           <SPostHeader>
-            {' '}
             <SArrowBox onClick={handleOverlayClick}>
-              {' '}
-              <ArrowBackIosIcon />{' '}
-            </SArrowBox>{' '}
-          </SPostHeader>{' '}
+              <ArrowBackIosIcon />
+            </SArrowBox>
+          </SPostHeader>
           <SPostMain>
-            {' '}
             <SLabel htmlFor="textForm">
-              {' '}
               <SForm method="post" onSubmit={handleSubmit(handleAddPost)}>
-                {' '}
                 <TextArea
                   {...register('desc')}
                   onChange={(e) => {
@@ -82,33 +73,31 @@ const AddPost = () => {
                   }}
                   placeholder="50文字以内で入力してください"
                   autoFocus={true}
-                ></TextArea>{' '}
+                ></TextArea>
                 <p
                   style={{
                     textAlign: 'right',
                     color: descWatch.length > 50 ? 'red' : '#080808',
                   }}
                 >
-                  {' '}
-                  {descWatch.length}/50{' '}
-                </p>{' '}
+                  {descWatch.length}/50
+                </p>
                 <SPostButton
                   type="submit"
                   isText={isText}
                   disabled={isLoadingSubmission}
                 >
-                  {' '}
                   {isLoadingSubmission ? (
                     <PulseLoader color="#fff" size={5} />
                   ) : (
                     <SendIcon />
-                  )}{' '}
-                </SPostButton>{' '}
-              </SForm>{' '}
-            </SLabel>{' '}
-          </SPostMain>{' '}
-        </SPostInner>{' '}
-      </SPostBox>{' '}
+                  )}
+                </SPostButton>
+              </SForm>
+            </SLabel>
+          </SPostMain>
+        </SPostInner>
+      </SPostBox>
     </SOverlay>
   );
 };

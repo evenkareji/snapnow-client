@@ -12,7 +12,10 @@ import { AppDispatch, useSelector } from '../redux/store';
 import { fetchInitialUser } from '../features/userSlice';
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/router';
+import SearchIcon from '@mui/icons-material/Search';
+
 import { useFollowingsPosts } from '../hooks/useFollowingsPosts';
+import HamburgerMenu from '../components/organisms/HamburgerMenu';
 
 export const getServerSideProps: GetServerSideProps<{
   posts: Post[];
@@ -28,6 +31,7 @@ const Home = ({
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
   const [posts, setPosts] = useState(initialPosts); // 投稿の状態を管理
+  const [tabIndex, setTabIndex] = useState(1);
   const { getFollowingsPosts } = useFollowingsPosts();
 
   const dispatch: AppDispatch = useDispatch();
@@ -41,11 +45,9 @@ const Home = ({
     }
   }, [user]);
 
-  // タブが選択されたときのハンドラ
   const fetchPosts = async () => {
     try {
       const response = await getFollowingsPosts(user?._id);
-      console.log(response);
 
       setPosts(response);
     } catch (error) {
@@ -53,7 +55,8 @@ const Home = ({
     }
   };
 
-  const handleTabSelect = (index: number) => {
+  const handleTabSelect = (index) => {
+    setTabIndex(index); // タブのインデックスを更新
     if (index === 0) {
       fetchPosts();
     } else if (index === 1) {
@@ -68,10 +71,16 @@ const Home = ({
     );
   }
   return (
-    <Tabs defaultIndex={1} onSelect={handleTabSelect}>
+    <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
       <StyledTabList>
+        <HamburgerMenu
+          username={user?.username}
+          handleTabSelect={handleTabSelect}
+          tabIndex={tabIndex}
+        />
         <StyledTab>フォロー中</StyledTab>
         <StyledTab>今何してる？</StyledTab>
+        <SSearchPostIcon onClick={() => router.push('/search-post')} />
       </StyledTabList>
 
       <StyledTabPanel>
@@ -99,20 +108,25 @@ const Home = ({
     </Tabs>
   );
 };
-// カスタムスタイルの TabList
+
+const SSearchPostIcon = styled(SearchIcon)`
+  cursor: pointer;
+`;
 const StyledTabList = styled(TabList)`
   display: flex;
-  justify-content: center;
-  margin: 0;
+  justify-content: space-between;
   padding: 0;
   list-style-type: none;
   position: fixed; // 位置を固定
   top: 0; // 上部に配置
-  width: 100%; // 幅を全体に広げる
-  z-index: 1000; // 他の要素より前面に表示
-  background-color: #ffffff; // 背景色（必要に応じて変更）
-  opacity: 0.6;
+  left: 0;
+  right: 0;
+  width: 92%;
+  margin: 0 auto;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.6);
   height: 46px;
+  align-items: center;
 `;
 
 // カスタムスタイルの Tab

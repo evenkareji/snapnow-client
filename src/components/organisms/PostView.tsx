@@ -36,11 +36,11 @@ export const PostView: FC<{ post: Post }> = (props) => {
   }, [post]);
 
   const onClickFollow = useCallback(
-    () => followUser(post, loginUser),
+    () => followUser(post.userId, loginUser?._id),
     [post._id, loginUser?._id, followUser],
   );
   const onClickUnFollow = useCallback(
-    () => unFollowUser(post, loginUser),
+    () => unFollowUser(post.userId, loginUser?._id),
     [post._id, loginUser?._id, unFollowUser],
   );
 
@@ -60,9 +60,10 @@ export const PostView: FC<{ post: Post }> = (props) => {
           <Box>
             <SUserName>{user?.username}</SUserName>
           </Box>
+
           <FollowToggleButton
             loginUser={loginUser}
-            postUserId={post.userId}
+            otherUserId={post.userId}
             onClickFollow={onClickFollow}
             onClickUnFollow={onClickUnFollow}
           />

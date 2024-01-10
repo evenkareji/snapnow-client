@@ -6,6 +6,7 @@ const ArrowBackIosIconStyled = styled(ArrowBackIosIcon)`
   left: 0px;
   top: 50%;
   transform: translateY(-50%);
+  cursor: pointer;
 `;
 
 export default ArrowBackIosIconStyled;

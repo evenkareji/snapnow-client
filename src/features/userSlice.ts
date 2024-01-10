@@ -71,7 +71,6 @@ export const login = createAsyncThunk<
       email,
       password,
     });
-    console.log(response.data.token);
 
     Cookies.set('token', JSON.stringify(response.data.token));
     return response.data as User;

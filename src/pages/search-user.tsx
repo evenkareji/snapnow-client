@@ -37,6 +37,7 @@ const SerachUser = () => {
             setSearchTerm={setSearchTerm}
             searchTerm={searchTerm}
             width={'71%'}
+            autoFocus={true}
           />
         }
         leftIcon={<ArrowBackIosIconStyled onClick={() => router.back()} />}

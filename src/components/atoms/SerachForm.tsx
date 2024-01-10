@@ -8,10 +8,12 @@ export const SearchForm = ({
   setSearchTerm,
   width = '100%',
   MarginBottom = '0px',
+  autoFocus = false,
 }) => {
   return (
     <SSearchForm
       type="text"
+      autoFocus={autoFocus}
       placeholder={placeholder}
       onKeyUp={searchHandler}
       value={searchTerm}

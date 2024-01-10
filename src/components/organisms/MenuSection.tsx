@@ -1,16 +1,19 @@
-import React from 'react';
-import { Hr } from '../atoms/Hr';
+import styled from '@emotion/styled';
 import MenuItemHeading from '../atoms/MenuItemHeading';
 import MenuItem from '../molecules/MenuItem';
 
 const MenuSection = ({ heading, items }) => (
-  <div>
+  <SBoxMenuItem>
     <MenuItemHeading>{heading}</MenuItemHeading>
     {items.map((item, index) => (
       <MenuItem key={index} {...item} />
     ))}
-    <Hr />
-  </div>
+  </SBoxMenuItem>
 );
-
+const SBoxMenuItem = styled.div`
+  border-bottom: 1px solid #dbdbdb;
+  box-sizing: border-box;
+  margin-top: 16px;
+  padding-bottom: 18px;
+`;
 export default MenuSection;

@@ -1,16 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import DescriptionIcon from '@mui/icons-material/Description';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import DescriptionIcon from '@mui/icons-material/Description';
-import { Hr } from '../atoms/Hr';
-import { logout } from '../../features/userSlice';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { logout } from '../../features/userSlice';
 import { AppDispatch } from '../../redux/store';
+import MenuContainer from '../atoms/MenuContainer';
 import MoreHorizIconStyled from '../atoms/MoreHorizIcon';
 import MenuSection from '../organisms/MenuSection';
-import { useRouter } from 'next/router';
-import MenuContainer from '../atoms/MenuContainer';
 
 const UserMenu = ({ username }) => {
   const menuItems = {
@@ -86,10 +85,11 @@ const UserMenu = ({ username }) => {
             zIndex: '1000',
             background: '#ffffff',
             width: '275px',
+            height: 'calc(100% - 49px)',
             top: '0',
             right: '0',
-            bottom: '0',
             position: 'fixed',
+            overflowY: 'scroll',
             display: 'block',
           }}
         >
@@ -104,13 +104,13 @@ const UserMenu = ({ username }) => {
             <h2
               style={{
                 textAlign: 'left',
-                marginBottom: '20px',
+                marginBottom: '24px',
                 fontSize: '20px',
               }}
             >
               プライバシーと設定
             </h2>
-            <Hr />
+
             <MenuSection
               heading="アカウントについて"
               items={menuItems.account}

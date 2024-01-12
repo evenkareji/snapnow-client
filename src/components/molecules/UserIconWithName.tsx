@@ -26,7 +26,7 @@ export const UserIconWithName = ({ profileUser }) => {
       <SLabel htmlFor="profile_image">
         <SProfileImg src={profileUser.profileImg} canUpload={canUpload} />
         {loading ? (
-          <SClipLoader color="#ed6103" loading={true} size={25} />
+          <SClipLoader color="var(--accent-color)" loading={true} size={25} />
         ) : (
           canUpload && <SAddCircleIcon />
         )}
@@ -65,7 +65,7 @@ const SAddCircleIcon = styled(AddCircleIcon)`
   bottom: -8px;
   left: 68%;
   font-size: 35px !important;
-  color: #ed6103 !important;
+  color: var(--accent-color) !important;
   background: #fff;
   border-radius: 2000px;
 `;
@@ -74,7 +74,7 @@ const SClipLoader = styled(ClipLoader)`
   bottom: -6px;
   left: 70%;
   font-size: 35px !important;
-  color: #ed6103 !important;
+  color: var(--accent-color) !important;
   background: #fff;
   border-radius: 2000px;
 `;

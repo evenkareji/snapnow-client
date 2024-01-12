@@ -1,6 +1,7 @@
 :root {
-  --body-bg-color: #fafafa;
+  --body-bg-color: #fff;
   --unfollow-bg-color: rgba(255, 255, 255);
+  --accent-color: #ff8d06;
 }
 .unfollow-bg-color {
   background-color: var(--unfollow-bg-color);

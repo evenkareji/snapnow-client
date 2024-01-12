@@ -30,8 +30,9 @@ const keyframesSvgCelebrate = keyframes`
 `;
 
 const HeartContainer = styled.div`
-  --heart-color: rgb(255, 91, 137);
+  --heart-color: var(--accent-color);
   position: relative;
+
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   transition: 0.3s;
@@ -87,7 +88,7 @@ const SvgCelebrate = styled.svg`
 `;
 
 // React component
-const LikeButton = ({ size = '20', isGood, toggleLike }) => {
+const LikeButton = ({ size = '16', isGood, toggleLike }) => {
   return (
     <HeartContainer isGood={isGood} size={size} title="Like">
       <Checkbox

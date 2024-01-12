@@ -1,26 +1,38 @@
 import styled from '@emotion/styled';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useRouter } from 'next/router';
+
 import { useLike } from '../../hooks/useLike';
 import { useSelector } from '../../redux/store';
 import LikeButton from '../atoms/LikeButton';
 import { UserIconImg } from '../atoms/UserIconImg';
+import { useGetAuthor } from '../../hooks/useGetAuthor';
+import { useEffect } from 'react';
+import FormattedTime from '../atoms/FormattedTime';
+import Link from 'next/link';
+import PostPopup from './PostPopup';
 const ProfilePost = ({ post, onDelete }) => {
   const { user: loginUser } = useSelector((state) => state.user);
-  const router = useRouter();
+  const { getAuthorByPostId, user } = useGetAuthor();
   const { toggleLike, isGood } = useLike(post, loginUser);
-  const { username } = router.query;
+  useEffect(() => {
+    getAuthorByPostId(post);
+  }, [post]);
 
-  // onClick={() => onDelete(post._id)}>
   return (
     <SArticle>
       <SLeftContent>
-        <SUserIconImg src={loginUser?.profileImg} />
+        <Link href={`/profile/${user?.username}`}>
+          <SUserIconImg src={user?.profileImg} />
+        </Link>
       </SLeftContent>
       <SRightContent>
         <SPostHeader>
-          <SPostUsername>{username}</SPostUsername>
-          <MoreHorizIcon />
+          <div>
+            <SPostUsername>{user?.username}</SPostUsername>
+            <FormattedTime dateString={post.createdAt} />
+          </div>
+          {user?.username === loginUser?.username && (
+            <PostPopup post={post} onDelete={onDelete} />
+          )}
         </SPostHeader>
         <SPostContent>{post.desc}</SPostContent>
         <SPostFooter>
@@ -36,10 +48,8 @@ const SArticle = styled.article`
   display: flex;
   padding: 16px 16px 0px 16px;
   border-bottom: 1px solid #f2f2f2;
-  border-right: 1px solid #f2f2f2;
-  border-left: 1px solid #f2f2f2;
   width: 100%;
-
+  background-color: #fff;
   box-sizing: border-box;
   align-items: start;
 `;
@@ -65,8 +75,11 @@ const SPostUsername = styled.span`
   font-size: 16px;
 `;
 const SUserIconImg = styled(UserIconImg)`
+  position: relative;
+  z-index: 1;
   width: 40px;
   height: 40px;
+  cursor: pointer;
 
   @media (min-width: 425px) {
     & {

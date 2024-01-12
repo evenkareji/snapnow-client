@@ -1,59 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import { Post } from '../../types';
 import useDeletePost from '../../hooks/useDeletePost';
 import ProfilePost from './ProfilePost';
+import { useLikesPosts } from '../../hooks/useLikesPosts';
+import { useProfilePosts } from '../../hooks/useProfilePosts';
 
-export const UserPostList = ({ username }) => {
+export const UserPostList = ({ tabIndex, profileUser }) => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const { handleDelete } = useDeletePost(setPosts);
+  const { getProfilePosts } = useProfilePosts();
+  const { getLikesPosts } = useLikesPosts();
+
   useEffect(() => {
     const fetchPosts = async () => {
-      if (!username) {
+      if (!profileUser) {
         return;
       }
-      const response: any = await axios.get(`/api/posts/profile/${username}`);
-
-      setPosts(
-        response.data.sort((post1, post2) => {
-          return (
-            new Date(post2.createdAt).valueOf() -
-            new Date(post1.createdAt).valueOf()
-          );
-        }),
-      );
+      if (tabIndex === 0) {
+        const response = await getProfilePosts(profileUser.username);
+        setPosts(response as any);
+      } else if (tabIndex === 1) {
+        const response = await getLikesPosts(profileUser._id);
+        setPosts(response);
+      }
     };
     fetchPosts();
-  }, [username]);
+  }, [profileUser]);
 
   return (
     <SPersonalPost>
-      <SUserArea>
-        {posts.map((post) => (
-          <ProfilePost post={post} key={post._id} onDelete={handleDelete} />
-        ))}
-      </SUserArea>
+      {posts.map((post) => (
+        <ProfilePost post={post} key={post._id} onDelete={handleDelete} />
+      ))}
     </SPersonalPost>
   );
 };
 
 const SPersonalPost = styled.div`
-  background-color: #fafafa;
+  background-color: #fff;
   width: 100%;
-  padding-top: 30px;
   padding-bottom: 275px;
-`;
-
-const SUserArea = styled.div`
-  /* width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-
-  @media (min-width: 650px) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 0.4fr));
-  }
-
-  grid-gap: 3px 3px; */
+  width: 100%;
 `;

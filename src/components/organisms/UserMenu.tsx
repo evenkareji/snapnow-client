@@ -85,7 +85,7 @@ const UserMenu = ({ username }) => {
             zIndex: '1000',
             background: '#ffffff',
             width: '275px',
-            height: 'calc(100% - 49px)',
+            height: '100%',
             top: '0',
             right: '0',
             position: 'fixed',

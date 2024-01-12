@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 const keyframesSvgFilled = keyframes`
     0%{
       transform: scale(0);
@@ -35,29 +35,30 @@ const HeartContainer = styled.div`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   transition: 0.3s;
-
-  /* animation: ${({ isGood }) =>
-    isGood &&
-    css`
-      ${keyframesSvgCelebrate} ${keyframesSvgFilled} 1.2s forwards cubic-bezier(0.19, 1, 0.22, 1)
-    `}; */
-`;
-
-const Checkbox = styled.input`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 20;
-  cursor: pointer;
+  display: flex; /* Flexコンテナにする */
+  justify-content: center; /* 水平方向中央 */
+  align-items: center; /* 垂直方向中央 */
 `;
 
 const SvgContainer = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Flexコンテナにする */
+  justify-content: center; /* 水平方向中央 */
+  align-items: center; /* 垂直方向中央 */
+`;
+
+const Checkbox = styled.input`
+  position: absolute;
+  /* チェックボックスのサイズと位置を調整 */
+  top: 50%; // ボックスの上端を中央に配置
+  left: 50%; // ボックスの左端を中央に配置
+  transform: translate(-50%, -50%); // ボックスを中央に移動
+  width: 24px; // ハートアイコンのサイズに合わせる
+  height: 24px; // ハートアイコンのサイズに合わせる
+  opacity: 0;
+  z-index: 20;
+  cursor: pointer;
 `;
 
 const SvgOutline = styled.svg`

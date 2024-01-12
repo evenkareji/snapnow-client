@@ -11,7 +11,7 @@ import { useUnFollow } from '../../hooks/useUnFollow';
 
 import { useRouter } from 'next/router';
 import { Post } from '../../types';
-import { HeartIcon } from '../atoms/HeartIcon/HeartIcon';
+import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
 
 export const PostView: FC<{ post: Post }> = (props) => {
@@ -73,18 +73,13 @@ export const PostView: FC<{ post: Post }> = (props) => {
         </SDescContainer>
       </SPostContent>
       <SAside>
-        <SHeartBox onClick={toggleLike}>
-          <HeartIcon isGood={isGood} />
-        </SHeartBox>
+        <LikeButton isGood={isGood} toggleLike={toggleLike} />
         <HeartCount>{post.likes.length}</HeartCount>
       </SAside>
     </PostBorder>
   );
 };
 
-const SHeartBox = styled.div`
-  cursor: pointer;
-`;
 const SPostContent = styled.div`
   position: absolute;
   top: 55px;

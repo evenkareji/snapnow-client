@@ -139,6 +139,4 @@ const LikeButton = ({ size = '20', isGood, toggleLike }) => {
   );
 };
 
-// Add the keyframes to the styled components
-
 export default LikeButton;

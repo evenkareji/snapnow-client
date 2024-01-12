@@ -73,7 +73,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
         </SDescContainer>
       </SPostContent>
       <SAside>
-        <LikeButton isGood={isGood} toggleLike={toggleLike} />
+        <LikeButton size={'25'} isGood={isGood} toggleLike={toggleLike} />
         <HeartCount>{post.likes.length}</HeartCount>
       </SAside>
     </PostBorder>

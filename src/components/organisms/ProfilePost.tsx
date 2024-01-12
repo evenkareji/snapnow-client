@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useRouter } from 'next/router';
 import { useLike } from '../../hooks/useLike';
 import { useSelector } from '../../redux/store';
 import LikeButton from '../atoms/LikeButton';
 import { UserIconImg } from '../atoms/UserIconImg';
 const ProfilePost = ({ post, onDelete }) => {
   const { user: loginUser } = useSelector((state) => state.user);
-
+  const router = useRouter();
   const { toggleLike, isGood } = useLike(post, loginUser);
+  const { username } = router.query;
+
   // onClick={() => onDelete(post._id)}>
   return (
     <SArticle>
@@ -16,12 +19,13 @@ const ProfilePost = ({ post, onDelete }) => {
       </SLeftContent>
       <SRightContent>
         <SPostHeader>
-          <div>name time</div>
+          <SPostUsername>{username}</SPostUsername>
           <MoreHorizIcon />
         </SPostHeader>
-        <div>{post.desc}</div>
-
-        <LikeButton isGood={isGood} toggleLike={toggleLike} />
+        <SPostContent>{post.desc}</SPostContent>
+        <SPostFooter>
+          <LikeButton isGood={isGood} toggleLike={toggleLike} />
+        </SPostFooter>
       </SRightContent>
     </SArticle>
   );
@@ -42,6 +46,7 @@ const SArticle = styled.article`
 const SLeftContent = styled.div`
   margin-right: 12px;
   width: 60px;
+  color: #000;
 `;
 const SRightContent = styled.div`
   padding-bottom: 12px;
@@ -51,6 +56,13 @@ const SPostHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+const SPostFooter = styled.div`
+  margin-top: 12px;
+`;
+const SPostUsername = styled.span`
+  font-weight: bold;
+  font-size: 16px;
 `;
 const SUserIconImg = styled(UserIconImg)`
   width: 40px;
@@ -63,5 +75,7 @@ const SUserIconImg = styled(UserIconImg)`
     }
   }
 `;
-
+const SPostContent = styled.div`
+  font-size: 16px;
+`;
 export default ProfilePost;

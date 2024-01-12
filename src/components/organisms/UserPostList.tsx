@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Card } from '../molecules/Card';
+
 import { Post } from '../../types';
 import useDeletePost from '../../hooks/useDeletePost';
+import ProfilePost from './ProfilePost';
 
 export const UserPostList = ({ username }) => {
   const [posts, setPosts] = useState<Array<Post>>([]);
@@ -31,7 +32,7 @@ export const UserPostList = ({ username }) => {
     <SPersonalPost>
       <SUserArea>
         {posts.map((post) => (
-          <Card post={post} key={post._id} onDelete={handleDelete} />
+          <ProfilePost post={post} key={post._id} onDelete={handleDelete} />
         ))}
       </SUserArea>
     </SPersonalPost>
@@ -46,7 +47,7 @@ const SPersonalPost = styled.div`
 `;
 
 const SUserArea = styled.div`
-  width: 100%;
+  /* width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
@@ -54,5 +55,5 @@ const SUserArea = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(200px, 0.4fr));
   }
 
-  grid-gap: 3px 3px;
+  grid-gap: 3px 3px; */
 `;

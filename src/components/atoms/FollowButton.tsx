@@ -7,22 +7,36 @@ type Props = {
   children: ReactNode;
   onClickFollow: () => void;
 };
-export const FollowButton: FC<Props> = memo((props) => {
-  const { children, onClickFollow } = props;
+export const FollowButton: FC<
+  Props & { fontSize?: string; width?: string; height?: string }
+> = memo((props) => {
+  const { children, onClickFollow, fontSize, width, height } = props;
+
   console.log('FollowButton');
 
   return (
     <IconButton style={{ padding: '0px' }} onClick={onClickFollow}>
-      <SUnFollowBtn className="unfollow-bg-color">{children}</SUnFollowBtn>
+      <SUnFollowBtn
+        className="unfollow-bg-color"
+        fontSize={fontSize}
+        width={width}
+        height={height}
+      >
+        {children}
+      </SUnFollowBtn>
     </IconButton>
   );
 });
 
 const SUnFollowBtn = styled(BaseBtn)`
-  width: 100%;
-  font-size: 12px;
-  font-weight: bold;
+  width: ${({ width }) => width || '100%'};
+  font-size: ${({ fontSize }) => fontSize || '12px'};
+  height: ${({ height }) => height || 'auto'};
 
+  font-weight: bold;
+  display: flex;
+  justify-content: center; // This will center the text horizontally
+  align-items: center;
   padding: 6px 15px 5px 17px;
 
   border-radius: 8px;

@@ -50,6 +50,7 @@ const SerachPost = () => {
   return (
     <>
       <ProfileHeader
+        borderBottom="none"
         title={
           <SearchForm
             placeholder="投稿を検索"

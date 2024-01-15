@@ -30,6 +30,7 @@ const SerachUser = () => {
   return (
     <>
       <ProfileHeader
+        borderBottom="none"
         title={
           <SearchForm
             placeholder="ユーザーを検索"

@@ -18,12 +18,13 @@ const SHeaderInner = styled.header`
 const SHeader = styled.header`
   padding: 22px 0px 11px 0px;
   align-items: center;
+  box-sizing: border-box;
+
+  border-bottom: ${({ borderBottom }) => borderBottom || '1px solid #f2f2f2'};
 `;
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({
-  title,
-  leftIcon,
-  rightIcon,
-}) => {
+const ProfileHeader: React.FC<
+  ProfileHeaderProps & { borderBottom?: string }
+> = ({ title, leftIcon, rightIcon, borderBottom }) => {
   const renderedTitle =
     typeof title === 'string' ? (
       <h1 style={{ fontSize: '16px' }}>{title}</h1>
@@ -32,7 +33,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     );
 
   return (
-    <SHeader>
+    <SHeader borderBottom={borderBottom}>
       <SHeaderInner>
         {leftIcon}
         {renderedTitle}

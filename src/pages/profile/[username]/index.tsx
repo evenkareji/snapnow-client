@@ -1,23 +1,26 @@
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import axios from 'axios';
-import { ReactElement, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { ProfileCount } from '../../../components/molecules/ProfileCount';
-import { UserPostList } from '../../../components/organisms/UserPostList';
-
 import { useRouter } from 'next/router';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
+import styled from 'styled-components';
 import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
+import { ProfileCount } from '../../../components/molecules/ProfileCount';
 import ProfileHeader from '../../../components/molecules/ProfileHeader';
 import { UserIconWithName } from '../../../components/molecules/UserIconWithName';
 import { FollowTab } from '../../../components/organisms/FollowTab';
 import UserMenu from '../../../components/organisms/UserMenu';
+import { UserPostList } from '../../../components/organisms/UserPostList';
 import Layout from '../../../components/templates/Layout';
 import { fetchInitialUser } from '../../../features/userSlice';
 import { AppDispatch, useSelector } from '../../../redux/store';
 
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Share from '../../../components/atoms/Share';
+import { FollowToggleButton } from '../../../components/molecules/FollowToggleButton';
+import { useFollow } from '../../../hooks/useFollow';
+import { useUnFollow } from '../../../hooks/useUnFollow';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -35,9 +38,11 @@ const ProfilePage = ({ profileUser }) => {
   const [isToPage, setIsToPage] = useState<boolean>(false);
   const [isPointer, setIsPointer] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState(0);
+  const [showIntroduction, setShowIntroduction] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.user);
+
   useEffect(() => {
     dispatch(fetchInitialUser());
   }, []);
@@ -61,6 +66,17 @@ const ProfilePage = ({ profileUser }) => {
     if (user?.username !== username) return;
     setIsToPage((prev) => !prev);
   };
+
+  const { followUser } = useFollow();
+  const { unFollowUser } = useUnFollow();
+  const onClickFollow = useCallback(
+    () => followUser(profileUser._id, user?._id),
+    [profileUser._id, user?._id, followUser],
+  );
+  const onClickUnFollow = useCallback(
+    () => unFollowUser(profileUser._id, user?._id),
+    [profileUser._id, user?._id, unFollowUser],
+  );
   const followings = profileUser?.followings || [];
   const followers = profileUser?.followers || [];
   const handleTabSelect = (index) => {
@@ -68,6 +84,10 @@ const ProfilePage = ({ profileUser }) => {
     if (index === 0) {
     } else if (index === 1) {
     }
+  };
+
+  const toggleIntroduction = () => {
+    setShowIntroduction((prev) => !prev);
   };
   if (loading) {
     return (
@@ -115,7 +135,30 @@ const ProfilePage = ({ profileUser }) => {
             count={followers.length}
           />
         </SProfileFlex>
-        <SIntroduction>{profileUser.desc}</SIntroduction>
+        {!isPointer && (
+          <SBox>
+            <FollowToggleButton
+              loginUser={user}
+              otherUserId={profileUser._id}
+              onClickFollow={onClickFollow}
+              onClickUnFollow={onClickUnFollow}
+              width="171px"
+              height="50px"
+              fontSize="16px"
+            />
+            <SHiddenCheckbox
+              id="toggleIcon"
+              type="checkbox"
+              onChange={toggleIntroduction}
+            />
+            <SLabel htmlFor="toggleIcon">
+              <SArrowLeftIcon />
+            </SLabel>
+          </SBox>
+        )}
+        <SIntroduction show={showIntroduction}>
+          {profileUser.desc}
+        </SIntroduction>
       </SProfileInfo>
       <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
         <StyledTabList>
@@ -132,6 +175,56 @@ const ProfilePage = ({ profileUser }) => {
     </SProfileBox>
   );
 };
+const SBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+`;
+const SIntroduction = styled.div`
+  display: ${({ show }) => (show ? 'block' : 'none')};
+  padding: 11px 0px 0px 0px;
+  margin: 0 auto;
+  width: 50%;
+  max-width: 600px;
+  text-align: center;
+  font-size: 16px;
+`;
+const SHiddenCheckbox = styled.input`
+  display: none;
+
+  &:checked + label > svg {
+    transform: rotate(-180deg);
+  }
+
+  &:checked ~ div {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    transition: transform 2s;
+  }
+`;
+
+const SLabel = styled.label`
+  width: 44px;
+  height: 50px;
+  background: #f1f1f2;
+  font-size: 6px;
+
+  color: #000;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center; // This will center the text horizontally
+  align-items: center;
+`;
+
+const SArrowLeftIcon = styled(ArrowDropUpIcon)`
+  color: #000;
+  transition: transform 0.3s ease-in-out;
+`;
 const StyledTabPanel = styled(TabPanel)`
   display: none;
   &.react-tabs__tab-panel--selected {
@@ -140,7 +233,7 @@ const StyledTabPanel = styled(TabPanel)`
 `;
 const StyledTabList = styled(TabList)`
   display: flex;
-
+  margin-top: 0px;
   padding: 0;
   list-style-type: none;
   z-index: 1000;
@@ -198,14 +291,7 @@ const SProfileBox = styled.div`
   width: 100%;
   overflow: hidden;
 `;
-const SIntroduction = styled.div`
-  padding: 30px 0px 0px;
-  margin: 0 auto;
-  width: 50%;
-  max-width: 600px;
-  text-align: center;
-  font-size: 16px;
-`;
+
 const SProfileFlex = styled.div`
   width: 55%;
   margin: 0 auto;
@@ -217,7 +303,7 @@ const SProfileInfo = styled.div`
   width: 100%;
   max-width: 432px;
   margin: 0 auto;
-  padding: 43px 0;
+  padding: 20px 0px 21px;
 `;
 
 ProfilePage.getLayout = function getLayout(page: ReactElement) {

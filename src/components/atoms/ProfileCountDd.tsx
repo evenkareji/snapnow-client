@@ -6,4 +6,5 @@ export const ProfileCountDd = ({ children }) => {
 };
 const SProfileCountDd = styled.dd`
   font-size: 12px;
+  color: #8a8b90;
 `;

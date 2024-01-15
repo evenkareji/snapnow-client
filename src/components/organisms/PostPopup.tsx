@@ -1,11 +1,13 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import styled from '@emotion/styled';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 const PostPopup = ({ onDelete, post }) => {
   const [showShareButtons, setShowShareButtons] = useState(false);
 
+  const router = useRouter();
   const handleShareClick = () => {
     setShowShareButtons(!showShareButtons);
   };
@@ -21,9 +23,20 @@ const PostPopup = ({ onDelete, post }) => {
       <ShareButtonsContainer show={showShareButtons}>
         <SharedContentWrapper>
           <SharedContent>
-            <SPopupList onClick={() => onDelete(post?._id)}>
+            <SPopupList
+              onClick={() => onDelete(post?._id)}
+              style={{ color: 'red' }}
+            >
               <DeleteIcon />
               <span style={{ fontWeight: 'bold' }}>削除</span>
+            </SPopupList>
+            <SPopupList
+              onClick={() =>
+                router.push(`/post/${post?._id}/edit?postDesc=${post.desc}`)
+              }
+            >
+              <EditIcon />
+              <span>編集</span>
             </SPopupList>
           </SharedContent>
         </SharedContentWrapper>
@@ -58,7 +71,7 @@ const ShareButtonsContainer = styled.div<{ show: boolean }>`
 const SPopupList = styled.div`
   width: 100%;
   cursor: pointer;
-  color: red;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   hover: {

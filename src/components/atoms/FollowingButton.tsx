@@ -30,7 +30,7 @@ const SOnFollowBtn = styled(BaseBtn)`
   height: ${({ height }) => height || 'auto'};
 
   display: flex;
-  justify-content: center; // This will center the text horizontally
+  justify-content: center;
   align-items: center;
   border-radius: 8px;
   border: none;
@@ -38,7 +38,6 @@ const SOnFollowBtn = styled(BaseBtn)`
   color: #000000;
   background: rgb(239, 239, 239);
   &:hover {
-    background: #ffffff;
     opacity: 0.8;
   }
 `;

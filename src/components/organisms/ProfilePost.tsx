@@ -9,9 +9,11 @@ import { useEffect } from 'react';
 import FormattedTime from '../atoms/FormattedTime';
 import Link from 'next/link';
 import PostPopup from './PostPopup';
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
 const ProfilePost = ({ post, onDelete }) => {
   const { user: loginUser } = useSelector((state) => state.user);
-  const { getAuthorByPostId, user } = useGetAuthor();
+  const { getAuthorByPostId, user, isLoadingAuthor } = useGetAuthor();
   const { toggleLike, isGood } = useLike(post, loginUser);
   useEffect(() => {
     getAuthorByPostId(post);
@@ -21,20 +23,34 @@ const ProfilePost = ({ post, onDelete }) => {
     <SArticle>
       <SLeftContent>
         <Link href={`/profile/${user?.username}`}>
-          <SUserIconImg src={user?.profileImg} />
+          {isLoadingAuthor ? (
+            <Skeleton
+              circle
+              height="40px"
+              width="40px"
+              containerClassName="avatar-skeleton"
+            />
+          ) : (
+            <SUserIconImg src={user?.profileImg} />
+          )}
         </Link>
       </SLeftContent>
       <SRightContent>
         <SPostHeader>
           <div>
-            <SPostUsername>{user?.username}</SPostUsername>
+            <SPostUsername>
+              {isLoadingAuthor ? <Skeleton /> : user?.username}
+            </SPostUsername>
+
             <FormattedTime dateString={post.createdAt} />
           </div>
           {user?.username === loginUser?.username && (
             <PostPopup post={post} onDelete={onDelete} />
           )}
         </SPostHeader>
-        <SPostContent>{post.desc}</SPostContent>
+        <SPostContent>
+          {isLoadingAuthor ? <Skeleton /> : post.desc}
+        </SPostContent>
         <SPostFooter>
           <LikeButton isGood={isGood} toggleLike={toggleLike} />
         </SPostFooter>

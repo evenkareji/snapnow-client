@@ -7,7 +7,8 @@ import handleImages from '../../utils/fileToBase64';
 import { useSelector } from '../../redux/store';
 import useProfileImageUpload from '../../hooks/useUploadProfileImg';
 import { ClipLoader } from 'react-spinners';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 export const UserIconWithName = ({ profileUser }) => {
   const [image, setImage] = useState<any>();
   const { user } = useSelector((state) => state.user);
@@ -24,11 +25,27 @@ export const UserIconWithName = ({ profileUser }) => {
   return (
     <>
       <SLabel htmlFor="profile_image">
-        <SProfileImg src={profileUser.profileImg} canUpload={canUpload} />
-        {loading ? (
-          <SClipLoader color="var(--accent-color)" loading={true} size={25} />
+        {profileUser.profileImg ? (
+          <>
+            <SProfileImg src={profileUser.profileImg} canUpload={canUpload} />
+
+            {loading ? (
+              <SClipLoader
+                color="var(--accent-color)"
+                loading={true}
+                size={25}
+              />
+            ) : (
+              canUpload && <SAddCircleIcon />
+            )}
+          </>
         ) : (
-          canUpload && <SAddCircleIcon />
+          <Skeleton
+            circle
+            height="180px"
+            width="180px"
+            containerClassName="avatar-skeleton"
+          />
         )}
 
         <input
@@ -42,7 +59,9 @@ export const UserIconWithName = ({ profileUser }) => {
         />
       </SLabel>
 
-      <SProfileUserName>{profileUser.username}</SProfileUserName>
+      <SProfileUserName>
+        {profileUser.username || <Skeleton />}
+      </SProfileUserName>
     </>
   );
 };

@@ -1,25 +1,25 @@
 import Link from 'next/link';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { useSelector } from '../../redux/store';
 
-import { useFollow } from '../../hooks/useFollow';
 import { useGetAuthor } from '../../hooks/useGetAuthor';
 import { useLike } from '../../hooks/useLike';
-import { useUnFollow } from '../../hooks/useUnFollow';
 
 import { useRouter } from 'next/router';
+import { useToggleFollow } from '../../hooks/useToggleFollow';
 import { Post } from '../../types';
 import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
 
 export const PostView: FC<{ post: Post }> = (props) => {
   const { post } = props;
 
-  const { followUser } = useFollow();
-  const { unFollowUser } = useUnFollow();
-  const { getAuthorByPostId, user } = useGetAuthor();
+  const { unFollowUser, followUser } = useToggleFollow();
+  const { getAuthorByPostId, user, isLoadingAuthor } = useGetAuthor();
   const router = useRouter();
   const { user: loginUser, loading } = useSelector((state) => state.user);
 
@@ -35,15 +35,6 @@ export const PostView: FC<{ post: Post }> = (props) => {
     getAuthorByPostId(post);
   }, [post]);
 
-  const onClickFollow = useCallback(
-    () => followUser(post.userId, loginUser?._id),
-    [post._id, loginUser?._id, followUser],
-  );
-  const onClickUnFollow = useCallback(
-    () => unFollowUser(post.userId, loginUser?._id),
-    [post._id, loginUser?._id, unFollowUser],
-  );
-
   if (!loginUser) {
     return null;
   }
@@ -55,17 +46,30 @@ export const PostView: FC<{ post: Post }> = (props) => {
       <SPostContent>
         <SPostHeader>
           <Link href={`profile/${user?.username}`}>
-            <SUserIconImg src={user?.profileImg} />
+            {isLoadingAuthor ? (
+              <Skeleton
+                circle
+                height="52px"
+                width="52px"
+                containerClassName="avatar-skeleton"
+              />
+            ) : (
+              <SUserIconImg src={user?.profileImg} />
+            )}
           </Link>
           <Box>
-            <SUserName>{user?.username}</SUserName>
+            {isLoadingAuthor ? (
+              <Skeleton width={100} />
+            ) : (
+              <SUserName>{user?.username}</SUserName>
+            )}
           </Box>
 
           <FollowToggleButton
             loginUser={loginUser}
             otherUserId={post.userId}
-            onClickFollow={onClickFollow}
-            onClickUnFollow={onClickUnFollow}
+            onClickFollow={() => followUser(post.userId, loginUser?._id)}
+            onClickUnFollow={() => unFollowUser(post.userId, loginUser?._id)}
           />
         </SPostHeader>
         <SDescContainer>

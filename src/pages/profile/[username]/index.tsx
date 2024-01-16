@@ -1,7 +1,7 @@
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import styled from 'styled-components';
@@ -19,8 +19,7 @@ import { AppDispatch, useSelector } from '../../../redux/store';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Share from '../../../components/atoms/Share';
 import { FollowToggleButton } from '../../../components/molecules/FollowToggleButton';
-import { useFollow } from '../../../hooks/useFollow';
-import { useUnFollow } from '../../../hooks/useUnFollow';
+import { useToggleFollow } from '../../../hooks/useToggleFollow';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -67,16 +66,8 @@ const ProfilePage = ({ profileUser }) => {
     setIsToPage((prev) => !prev);
   };
 
-  const { followUser } = useFollow();
-  const { unFollowUser } = useUnFollow();
-  const onClickFollow = useCallback(
-    () => followUser(profileUser._id, user?._id),
-    [profileUser._id, user?._id, followUser],
-  );
-  const onClickUnFollow = useCallback(
-    () => unFollowUser(profileUser._id, user?._id),
-    [profileUser._id, user?._id, unFollowUser],
-  );
+  const { followUser, unFollowUser } = useToggleFollow();
+
   const followings = profileUser?.followings || [];
   const followers = profileUser?.followers || [];
   const handleTabSelect = (index) => {
@@ -140,8 +131,8 @@ const ProfilePage = ({ profileUser }) => {
             <FollowToggleButton
               loginUser={user}
               otherUserId={profileUser._id}
-              onClickFollow={onClickFollow}
-              onClickUnFollow={onClickUnFollow}
+              onClickFollow={() => followUser(profileUser._id, user?._id)}
+              onClickUnFollow={() => unFollowUser(profileUser._id, user?._id)}
               width="171px"
               height="50px"
               fontSize="16px"
@@ -181,6 +172,7 @@ const SBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3px;
+  margin-top: 10px;
 `;
 const SIntroduction = styled.div`
   display: ${({ show }) => (show ? 'block' : 'none')};
@@ -213,7 +205,7 @@ const SLabel = styled.label`
   height: 50px;
   background: #f1f1f2;
   font-size: 6px;
-
+  cursor: pointer;
   color: #000;
   border-radius: 8px;
   display: flex;
@@ -252,18 +244,17 @@ const StyledTab = styled(Tab)`
   cursor: pointer;
   border: none;
   background-color: transparent;
-  color: white; // テキストカラーを白に
-  margin-right: 4px; // タブ間のマージンを設定
-  outline: none; //
-  // アクティブなタブのスタイル
+  color: white;
+  margin-right: 4px;
+  outline: none;
+
   &.react-tabs__tab--selected {
-    border-bottom: 3px solid #ff8d06; // 下線を白にして画像に合わせる
-    color: #ff8d06; // アクティブなタブのテキストカラーを白に
+    border-bottom: 3px solid #ff8d06;
+    color: #ff8d06;
   }
 
-  // アクティブでないタブのスタイル
   &:not(.react-tabs__tab--selected) {
-    border-bottom: none; // 非アクティブなタブの下線を削除
+    border-bottom: none;
     color: #c9c9c9; // 非アクティブなタブのテキストカラーを薄い色に
     &:hover {
       color: #ff8d06; // ホバー時にテキストカラーを白に

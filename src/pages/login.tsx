@@ -27,7 +27,11 @@ const Login = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   const googleLogin = () => {
-    window.open('https://snapnow-server.onrender.com/auth/google/', '_self');
+    window.open(
+      'https://snapnow-server.onrender.com/auth/google/callback',
+      '_self',
+    );
+    // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
   const [passwordShown, setPasswordShown] = useState(false);
 

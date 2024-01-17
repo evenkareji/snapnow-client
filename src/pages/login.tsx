@@ -31,8 +31,8 @@ const Login = () => {
       'https://snapnow-server.onrender.com/auth/google/callback',
       '_self',
     );
-    // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
+  // window.open('http://localhost:8000/auth/google/callback', '_self');
   const [passwordShown, setPasswordShown] = useState(false);
 
   const togglePasswordVisiblity = () => {

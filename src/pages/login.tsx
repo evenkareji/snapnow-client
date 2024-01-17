@@ -28,8 +28,10 @@ const Login = () => {
 
   const googleLogin = () => {
     window.open(
-      'https://snapnow-server.onrender.com/auth/google/callback',
+      'https://snapnow-client.vercel.app/auth/google/callback',
       '_self',
+      // 'https://snapnow-server.onrender.com/auth/google/callback',
+      // '_self',
     );
   };
   // window.open('http://localhost:8000/auth/google/callback', '_self');

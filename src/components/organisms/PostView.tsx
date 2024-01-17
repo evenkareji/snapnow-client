@@ -46,16 +46,18 @@ export const PostView: FC<{ post: Post }> = (props) => {
       <SPostContent>
         <SPostHeader>
           <Link href={`profile/${user?.username}`}>
-            {isLoadingAuthor ? (
-              <Skeleton
-                circle
-                height="52px"
-                width="52px"
-                containerClassName="avatar-skeleton"
-              />
-            ) : (
-              <SUserIconImg src={user?.profileImg} />
-            )}
+            <a>
+              {isLoadingAuthor ? (
+                <Skeleton
+                  circle
+                  height="52px"
+                  width="52px"
+                  containerClassName="avatar-skeleton"
+                />
+              ) : (
+                <SUserIconImg src={user?.profileImg} />
+              )}
+            </a>
           </Link>
           <Box>
             {isLoadingAuthor ? (

@@ -23,16 +23,18 @@ const ProfilePost = ({ post, onDelete }) => {
     <SArticle>
       <SLeftContent>
         <Link href={`/profile/${user?.username}`}>
-          {isLoadingAuthor ? (
-            <Skeleton
-              circle
-              height="40px"
-              width="40px"
-              containerClassName="avatar-skeleton"
-            />
-          ) : (
-            <SUserIconImg src={user?.profileImg} />
-          )}
+          <a>
+            {isLoadingAuthor ? (
+              <Skeleton
+                circle
+                height="40px"
+                width="40px"
+                containerClassName="avatar-skeleton"
+              />
+            ) : (
+              <SUserIconImg src={user?.profileImg} />
+            )}
+          </a>
         </Link>
       </SLeftContent>
       <SRightContent>

@@ -28,6 +28,7 @@ const Login = () => {
 
   const googleLogin = () => {
     window.open('/api/auth/google/callback', '_self');
+    // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
   // window.open(
   //   'https://snapnow-server.onrender.com/auth/google/callback',

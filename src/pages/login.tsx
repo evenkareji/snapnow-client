@@ -27,11 +27,12 @@ const Login = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   const googleLogin = () => {
-    window.open(
-      'https://snapnow-server.onrender.coms/auth/google/callback',
-      '_self',
-    );
+    window.open('/api/auth/google/callback', '_self');
   };
+  // window.open(
+  //   'https://snapnow-server.onrender.com/auth/google/callback',
+  //   '_self',
+  // );
   // window.open('http://localhost:8000/auth/google/callback', '_self');
   // 'https://snapnow-client.vercel.app/auth/google/callback',
   // '_self',

@@ -22,7 +22,7 @@ const PasswordInput = ({ register, ...props }) => {
   const IconContainer = styled.div`
     position: absolute;
     right: 10px;
-    top: 50%;
+    top: 55%;
     transform: translateY(-50%);
     cursor: pointer;
   `;

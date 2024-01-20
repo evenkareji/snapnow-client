@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '../hooks/useLogin';
@@ -27,9 +27,16 @@ const Login = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   const googleLogin = () => {
+    // window.open(
+    //   'https://snapnow-server.onrender.com/auth/google/callback',
+    //   '_self',
+    // );
     window.open('/api/auth/google/callback', '_self');
     // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
+  useEffect(() => {
+    console.log(process.env.CLOUD_NAME);
+  }, []);
   // window.open(
   //   'https://snapnow-server.onrender.com/auth/google/callback',
   //   '_self',

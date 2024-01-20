@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 export const BaseInput = styled.input`
+  position: relative;
   height: 40px;
   width: 100%;
   display: block;
   max-width: 400px;
   border: 1px solid #d9d9d9;
-  border-radius: 14px;
+  border-radius: 3px;
   transition: transform 0.4s;
   padding: 22px 10px;
   &:focus {

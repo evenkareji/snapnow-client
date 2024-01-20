@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '../hooks/useLogin';
@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { SignInData } from '../types';
 import { loginValidationSchema } from '../utils/validationSchema';
 import { PulseLoader } from 'react-spinners';
+import PasswordInput from '../components/atoms/PasswordInput';
 
 const Login = () => {
   const {
@@ -27,11 +28,11 @@ const Login = () => {
   const { user, loading } = useSelector((state) => state.user);
 
   const googleLogin = () => {
-    // window.open(
-    //   'https://snapnow-server.onrender.com/auth/google/callback',
-    //   '_self',
-    // );
-    window.open('/api/auth/google/callback', '_self');
+    window.open(
+      'https://snapnow-server.onrender.com/auth/google/callback',
+      '_self',
+    );
+    // window.open('/api/auth/google/callback', '_self');
     // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
   useEffect(() => {
@@ -45,11 +46,6 @@ const Login = () => {
   // 'https://snapnow-client.vercel.app/auth/google/callback',
   // '_self',
 
-  const [passwordShown, setPasswordShown] = useState(false);
-
-  const togglePasswordVisiblity = () => {
-    setPasswordShown((passwordShown) => !passwordShown);
-  };
   if (user && !loading) {
     router.push('/');
   }
@@ -70,15 +66,12 @@ const Login = () => {
               email="email"
               placeholder="メールアドレス"
             />
-            <SPassword
-              id="password"
-              type={passwordShown ? 'text' : 'password'}
-              {...register('password')}
+            <PasswordInput
               placeholder="パスワード"
+              register={{ ...register('password') }}
+              isError={isError}
             />
-            <button type="button" onClick={togglePasswordVisiblity}>
-              表示/非表示
-            </button>
+
             <Link href="/reset">パスワードを忘れた場合</Link>
             <p style={{ marginBottom: '14px', color: 'red' }}>
               {errors.email?.message as React.ReactNode}{' '}
@@ -179,8 +172,6 @@ const SFormHead = styled.div`
 const SEmail = styled(BaseInput)`
   margin-bottom: 14px;
 `;
-
-const SPassword = styled(BaseInput)``;
 
 const SSubmit = styled.button`
   text-decoration: none;

@@ -11,29 +11,26 @@ import { useForm } from 'react-hook-form';
 import { registerValidationSchema } from '../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSelector } from '../redux/store';
+import PasswordInput from '../components/atoms/PasswordInput';
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: zodResolver(registerValidationSchema),
   });
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
 
   const { registerSubmit, emailExist, isError } = useRegister();
-  const [passwordShown, setPasswordShown] = useState(false);
+
   useEffect(() => {
     if (user && !loading) {
       router.push('/');
     }
   }, [user]);
-
-  const togglePasswordVisiblity = () => {
-    setPasswordShown((passwordShown) => !passwordShown);
-  };
 
   return (
     <SLoginBack>
@@ -71,20 +68,21 @@ const Register = () => {
               そのメールアドレスは使用されています
             </SEmailExist>
           )}
-          <SPassword
-            type={passwordShown ? 'text' : 'password'} // typeを動的に変更
-            {...register('password')}
+          <PasswordInput
+            placeholder="パスワード"
+            register={{ ...register('password') }}
           />
-          <button type="button" onClick={togglePasswordVisiblity}>
-            表示/非表示
-          </button>
           <p style={{ marginBottom: '14px', color: 'red' }}>
             {errors.password?.message as React.ReactNode}
           </p>
-          <SPasswordConfirmation
-            placeholder="確認用パスワード"
+          {/* <SPasswordConfirmation
             type="password"
             {...register('passwordConfirmation')}
+            isError={isError}
+          /> */}
+          <PasswordInput
+            placeholder="確認用パスワード"
+            register={{ ...register('passwordConfirmation') }}
             isError={isError}
           />
           <p style={{ marginBottom: '14px', color: 'red' }}>
@@ -180,9 +178,6 @@ const SName = styled(BaseInput)`
 `;
 const SEmail = styled(BaseInput)``;
 
-const SPassword = styled(BaseInput)`
-  /* margin-bottom: 18px; */
-`;
 const SPasswordConfirmation = styled(BaseInput)`
   outline: ${({ isError }) => isError && '#ed0303 auto 2px'};
 `;

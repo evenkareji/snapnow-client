@@ -1,19 +1,20 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import { useEffect } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLogin } from '../hooks/useLogin';
-import { ErrorMessage } from '../components/atoms/ErrorMessage';
-import { Hr } from '../components/atoms/Hr';
-import { BaseInput } from '../components/atoms/BaseInput';
 import { useRouter } from 'next/router';
-import { useSelector } from '../redux/store';
 import { useForm } from 'react-hook-form';
+import { PulseLoader } from 'react-spinners';
+import { BaseInput } from '../components/atoms/BaseInput';
+import { ErrorMessage } from '../components/atoms/ErrorMessage';
+import GoogleButton from '../components/atoms/GoogleBtn';
+import LineWithText from '../components/atoms/LineWithText';
+import PasswordInput from '../components/atoms/PasswordInput';
+import SubmitButton from '../components/atoms/SubmitBtn';
+import { useLogin } from '../hooks/useLogin';
+import { useSelector } from '../redux/store';
 import { SignInData } from '../types';
 import { loginValidationSchema } from '../utils/validationSchema';
-import { PulseLoader } from 'react-spinners';
-import PasswordInput from '../components/atoms/PasswordInput';
 
 const Login = () => {
   const {
@@ -35,9 +36,7 @@ const Login = () => {
     // window.open('/api/auth/google/callback', '_self');
     // window.open('http://localhost:8000/auth/google/callback', '_self');
   };
-  useEffect(() => {
-    console.log(process.env.CLOUD_NAME);
-  }, []);
+
   // window.open(
   //   'https://snapnow-server.onrender.com/auth/google/callback',
   //   '_self',
@@ -55,10 +54,9 @@ const Login = () => {
       <SLoginBack>
         <SLoginBorder>
           <SForm onSubmit={handleSubmit(loginSubmit)}>
-            <SFormHead>SNS</SFormHead>
+            <SFormHead>Snapnow</SFormHead>
             <p>メールアドレス :fsf@gmail.com</p>
             <p>パスワード　　 :123456</p>
-
             <SEmail
               id="email"
               autoFocus={true}
@@ -69,10 +67,12 @@ const Login = () => {
             <PasswordInput
               placeholder="パスワード"
               register={{ ...register('password') }}
-              isError={isError}
             />
-
-            <Link href="/reset">パスワードを忘れた場合</Link>
+            <Link href="/reset">
+              <a style={{ textDecoration: 'none', color: '#6e7173' }}>
+                パスワードを忘れた場合
+              </a>
+            </Link>
             <p style={{ marginBottom: '14px', color: 'red' }}>
               {errors.email?.message as React.ReactNode}{' '}
               {errors.password?.message as React.ReactNode}
@@ -86,17 +86,16 @@ const Login = () => {
                 メールアドレスかパスワードが間違っています
               </SErrorMessage>
             )}
-            <SSubmit type="submit">
+            <SubmitButton type="submit">
               {loginLoading ? (
                 <PulseLoader color="#fff" size={5} />
               ) : (
                 'ログイン'
               )}
-            </SSubmit>
-            <button onClick={() => googleLogin()} type="button">
-              googleでログイン
-            </button>
-            <SHr />
+            </SubmitButton>
+            <LineWithText />
+            <GoogleButton onClick={() => googleLogin()} />
+
             <STextFlex>
               <SAcountQuestion>アカウントをお持ちでないですか?</SAcountQuestion>
               <Link href="/register" style={{ textDecoration: 'none' }}>
@@ -173,32 +172,13 @@ const SEmail = styled(BaseInput)`
   margin-bottom: 14px;
 `;
 
-const SSubmit = styled.button`
-  text-decoration: none;
-  list-style: none;
-  border: none;
-  width: 50%;
-  height: 40px;
-  background-color: #ed6103;
-  border-radius: 30px;
-  color: #fff;
-  display: flex;
-  max-width: 150px;
-  margin-left: auto;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const STextFlex = styled.div`
+  margin-top: 50px;
   display: flex;
   justify-content: space-between;
   a {
     color: #ed6103;
   }
 `;
-const SHr = styled(Hr)``;
 
 export default Login;

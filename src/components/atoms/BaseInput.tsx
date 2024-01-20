@@ -6,7 +6,7 @@ export const BaseInput = styled.input`
   display: block;
   max-width: 400px;
   border: 1px solid #d9d9d9;
-  border-radius: 3px;
+  border-radius: 6px;
   transition: transform 0.4s;
   padding: 22px 10px;
   &:focus {

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { BaseInput } from '../components/atoms/BaseInput';
 import { ErrorMessage } from '../components/atoms/ErrorMessage';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useRegister } from '../hooks/useRegister';
-import { useForm } from 'react-hook-form';
-import { registerValidationSchema } from '../utils/validationSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useSelector } from '../redux/store';
 import PasswordInput from '../components/atoms/PasswordInput';
+import { useRegister } from '../hooks/useRegister';
+import { useSelector } from '../redux/store';
+import { registerValidationSchema } from '../utils/validationSchema';
 const Register = () => {
   const {
     register,
@@ -75,11 +75,7 @@ const Register = () => {
           <p style={{ marginBottom: '14px', color: 'red' }}>
             {errors.password?.message as React.ReactNode}
           </p>
-          {/* <SPasswordConfirmation
-            type="password"
-            {...register('passwordConfirmation')}
-            isError={isError}
-          /> */}
+
           <PasswordInput
             placeholder="確認用パスワード"
             register={{ ...register('passwordConfirmation') }}
@@ -177,10 +173,6 @@ const SName = styled(BaseInput)`
   /* margin-bottom: 18px; */
 `;
 const SEmail = styled(BaseInput)``;
-
-const SPasswordConfirmation = styled(BaseInput)`
-  outline: ${({ isError }) => isError && '#ed0303 auto 2px'};
-`;
 
 const SSubmit = styled.button`
   text-decoration: none;

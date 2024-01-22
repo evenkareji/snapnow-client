@@ -12,6 +12,8 @@ import PasswordInput from '../components/atoms/PasswordInput';
 import { useRegister } from '../hooks/useRegister';
 import { useSelector } from '../redux/store';
 import { registerValidationSchema } from '../utils/validationSchema';
+import SubmitButton from '../components/atoms/SubmitBtn';
+import { PulseLoader } from 'react-spinners';
 const Register = () => {
   const {
     register,
@@ -24,7 +26,8 @@ const Register = () => {
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
 
-  const { registerSubmit, emailExist, isError } = useRegister();
+  const { registerSubmit, emailExist, isError, registerLoading } =
+    useRegister();
 
   useEffect(() => {
     if (user && !loading) {
@@ -39,13 +42,11 @@ const Register = () => {
           <SArrowBackIosNewIconBox href={'/login'}>
             <SArrowBackIosNewIcon />
           </SArrowBackIosNewIconBox>
-          <SHead>
-            新規登録<Sp>本物のメールアドレスは入力しないでください</Sp>
-          </SHead>
+          <SHead>新規登録</SHead>
           <SName
             type="text"
-            autoFocus={true}
             placeholder="ユーザー名"
+            autoComplete="username"
             {...register('username')}
           />
           <p style={{ marginBottom: '14px', color: 'red' }}>
@@ -53,8 +54,9 @@ const Register = () => {
           </p>
           <SEmail
             type="email"
-            placeholder="メールアドレス *本物のメールアドレスは入力しないでください"
+            placeholder="メールアドレス"
             {...register('email')}
+            autoComplete="off"
           />
           <p style={{ marginBottom: '14px', color: 'red' }}>
             {errors.email?.message as React.ReactNode}
@@ -71,6 +73,7 @@ const Register = () => {
           <PasswordInput
             placeholder="パスワード"
             register={{ ...register('password') }}
+            autoComplete="off"
           />
           <p style={{ marginBottom: '14px', color: 'red' }}>
             {errors.password?.message as React.ReactNode}
@@ -80,6 +83,7 @@ const Register = () => {
             placeholder="確認用パスワード"
             register={{ ...register('passwordConfirmation') }}
             isError={isError}
+            autoComplete="none"
           />
           <p style={{ marginBottom: '14px', color: 'red' }}>
             {errors.password?.message as React.ReactNode}
@@ -93,9 +97,10 @@ const Register = () => {
               パスワードが一致しません
             </SErrorMessage>
           )}
-          <SSubmit type="submit" formnovalidate>
-            登録
-          </SSubmit>
+
+          <SubmitButton type="submit">
+            {registerLoading ? <PulseLoader color="#fff" size={5} /> : '登録'}
+          </SubmitButton>
         </SForm>
       </SLoginBorder>
     </SLoginBack>
@@ -106,10 +111,7 @@ const SEmailExist = styled.p`
   font-size: 15px;
   margin-top: -1px;
 `;
-const Sp = styled.p`
-  color: red;
-  font-size: 15px;
-`;
+
 const SArrowBackIosNewIconBox = styled(Link)`
   display: inline-block;
 
@@ -158,8 +160,8 @@ const SLoginBorder = styled.div`
   }
 `;
 const SForm = styled.form`
-  width: 70%;
-  height: 60vh;
+  width: 85%;
+  /* height: 60vh; */
   max-width: 400px;
   margin: 0 auto;
   padding: 30px 0px;
@@ -169,25 +171,7 @@ const SHead = styled.div`
   font-size: 24px;
   margin-bottom: 40px;
 `;
-const SName = styled(BaseInput)`
-  /* margin-bottom: 18px; */
-`;
+const SName = styled(BaseInput)``;
 const SEmail = styled(BaseInput)``;
-
-const SSubmit = styled.button`
-  text-decoration: none;
-  list-style: none;
-  border: none;
-  width: 50%;
-  height: 40px;
-  background-color: #ed6103;
-  border-radius: 30px;
-  color: #fff;
-  display: flex;
-  max-width: 150px;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-`;
 
 export default Register;

@@ -23,6 +23,7 @@ import { useToggleFollow } from '../../../hooks/useToggleFollow';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
+
   const response = await axios.get(
     `${process.env.API_URL}/users?username=${username}`,
   );
@@ -147,7 +148,7 @@ const ProfilePage = ({ profileUser }) => {
             </SLabel>
           </SBox>
         )}
-        <SIntroduction show={showIntroduction}>
+        <SIntroduction isPointer={isPointer} show={showIntroduction}>
           {profileUser.desc}
         </SIntroduction>
       </SProfileInfo>
@@ -175,7 +176,8 @@ const SBox = styled.div`
   margin-top: 10px;
 `;
 const SIntroduction = styled.div`
-  display: ${({ show }) => (show ? 'block' : 'none')};
+  display: ${({ isPointer, show }) => (isPointer || show ? 'block' : 'none')};
+
   padding: 11px 0px 0px 0px;
   margin: 0 auto;
   width: 50%;

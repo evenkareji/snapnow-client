@@ -8,9 +8,21 @@ type InitialStateUser = {
   user: User | null;
   error: boolean;
 };
+const noLoginUser = {
+  _id: '65adf6aa18a1276fcd8d0ca4',
+  username: 'ログインしていません',
+
+  profileImg: '',
+  desc: '',
+
+  followers: [],
+  followings: [],
+
+  updatedAt: 0,
+};
 const initialStateUser: InitialStateUser = {
   loading: true,
-  user: null,
+  user: noLoginUser,
   error: false,
 };
 

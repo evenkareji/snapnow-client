@@ -37,19 +37,10 @@ export const PostView: FC<{ post: Post }> = (props) => {
   useEffect(() => {
     getAuthorByPostId(post);
   }, [post]);
-  if (!loginUser) {
-    return null;
-  }
   useEffect(() => {
     const postElement = postRef.current;
     const audioElement: any = audioRef.current;
-    // const repeatAudio = () => {
-    //   audioElement.play();
-    // };
 
-    // if (audioElement) {
-    //   audioElement.addEventListener('ended', repeatAudio);
-    // }
     if (postElement && audioElement) {
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -72,6 +63,10 @@ export const PostView: FC<{ post: Post }> = (props) => {
     }
     return () => {};
   }, [postRef, audioRef]);
+
+  if (!loginUser) {
+    return null;
+  }
 
   return (
     <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">

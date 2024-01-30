@@ -71,7 +71,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
       };
     }
     return () => {}; // Add this line
-  }, [postRef, audioRef]);
+  }, [postRef, audioRef, getAuthorByPostId]);
   return (
     <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">
       {post.img && <SImg src={post.img} alt="" />}

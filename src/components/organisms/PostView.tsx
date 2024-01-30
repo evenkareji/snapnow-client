@@ -43,13 +43,13 @@ export const PostView: FC<{ post: Post }> = (props) => {
   useEffect(() => {
     const postElement = postRef.current;
     const audioElement: any = audioRef.current;
-    const repeatAudio = () => {
-      audioElement.play();
-    };
+    // const repeatAudio = () => {
+    //   audioElement.play();
+    // };
 
-    if (audioElement) {
-      audioElement.addEventListener('ended', repeatAudio);
-    }
+    // if (audioElement) {
+    //   audioElement.addEventListener('ended', repeatAudio);
+    // }
     if (postElement && audioElement) {
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -70,8 +70,9 @@ export const PostView: FC<{ post: Post }> = (props) => {
         observer.unobserve(postElement);
       };
     }
-    return () => {}; // Add this line
-  }, [postRef, audioRef, getAuthorByPostId]);
+    return () => {};
+  }, [postRef, audioRef]);
+
   return (
     <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">
       {post.img && <SImg src={post.img} alt="" />}
@@ -111,7 +112,8 @@ export const PostView: FC<{ post: Post }> = (props) => {
         <SDescContainer>
           <SPostArticle post={post.img}>{post.desc}</SPostArticle>
         </SDescContainer>
-        <audio ref={audioRef} controls>
+
+        <audio ref={audioRef} loop controls>
           <source src={post.audioUrl} type="audio/webm" />
           お使いのブラウザはオーディオ要素をサポートしていません。
         </audio>

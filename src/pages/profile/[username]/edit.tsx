@@ -13,6 +13,8 @@ import { ClipLoader } from 'react-spinners';
 import { UserIconImg } from '../../../components/atoms/UserIconImg';
 import { fetchInitialUser } from '../../../features/userSlice';
 import { updateProfileValidationSchema } from '../../../utils/validationSchema';
+import ProfileHeader from '../../../components/molecules/ProfileHeader';
+import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
 
 const UpdateProfilePage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -73,6 +75,11 @@ const UpdateProfilePage = () => {
   };
   return (
     <>
+      <ProfileHeader
+        title={'プロフィール編集'}
+        leftIcon={<ArrowBackIosIconStyled onClick={() => router.back()} />}
+        rightIcon
+      />
       <SForm onSubmit={handleSubmit(updateProfile)}>
         <SHeadingForm>プロフィールを編集</SHeadingForm>
         <SProfileImg src={user.profileImg} alt="" />
@@ -148,7 +155,7 @@ const SSaveProfileBtn = styled(PrimaryBtn)`
   max-width: 400px;
   height: 48px;
   display: block;
-  margin: 0 auto;
+  margin: 100px auto 0px;
 `;
 
 export default UpdateProfilePage;

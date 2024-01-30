@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
 
-const App = () => {
+const Audio = () => {
   const [file, setFile] = useState([]);
   const [audioState, setAudioState] = useState(true);
   const audioRef = useRef();
@@ -60,9 +60,8 @@ const App = () => {
 
     try {
       const response = await axios.post('api/upload/upload-audio', formData);
-      // const data = await response.json();
-      console.log(response);
-      console.log('アップロード完了！URL:', data.url);
+
+      console.log('アップロード完了！URL', response.data.url, 'url');
     } catch (error) {
       console.error('アップロードに失敗しました:', error);
     }
@@ -93,4 +92,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Audio;

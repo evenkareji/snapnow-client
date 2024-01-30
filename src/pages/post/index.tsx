@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import styled from 'styled-components';
@@ -9,12 +9,16 @@ import { fetchInitialUser } from '../../features/userSlice';
 import { AppDispatch, useSelector } from '../../redux/store';
 import SendIcon from '@mui/icons-material/Send';
 import { useAddPost } from '../../hooks/useAddPost';
+import ReactAudioPlayer from 'react-audio-player';
 import { PulseLoader } from 'react-spinners';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 const AddPost = () => {
   const [isText, setIsText] = useState(false);
   const [isLoadingSubmission, setIsLoadingSubmission] =
     useState<boolean>(false);
+  // const [audioUrl, setAudioUrl] = useState<any>();
+
   const { register, handleSubmit, watch, setValue } = useForm();
   let descWatch = watch('desc', '');
   useEffect(() => {
@@ -34,7 +38,7 @@ const AddPost = () => {
       router.push('/login');
     }
   }, [user]);
-  const handleAddPost = ({ desc }) => AddPost(desc);
+
   const textLimit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxText = 50;
     const textLength = e.target.value.trim().length;
@@ -46,6 +50,82 @@ const AddPost = () => {
   const handlePostBoxClick = (event) => {
     event.stopPropagation();
   };
+
+  const [file, setFile] = useState([]);
+  const [audioState, setAudioState] = useState(true);
+  const audioRef = useRef<any>();
+
+  useEffect(() => {
+    // マイクへのアクセス権を取得
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: false })
+      .then(handleSuccess)
+      .catch(handleError);
+  }, []);
+
+  const handleSuccess = (stream) => {
+    // レコーディングのインスタンスを作成
+    audioRef.current = new MediaRecorder(stream, {
+      mimeType: 'video/webm;codecs=vp9',
+    });
+    // 音声データを貯める場所
+    let chunks: any = [];
+    // 録音が終わった後のデータをまとめる
+    audioRef.current.addEventListener('dataavailable', (event) => {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+      }
+      // 音声データをセット
+      setFile(chunks);
+    });
+    // 録音を開始したら状態を変える
+    audioRef.current.addEventListener('start', () => setAudioState(false));
+    // 録音がストップしたらchunkを空にして、録音状態を更新
+    audioRef.current.addEventListener('stop', () => {
+      setAudioState(true);
+      chunks = [];
+    });
+  };
+
+  // 録音開始
+  const handleStart = () => {
+    audioRef.current.start();
+  };
+
+  // 録音停止
+  const handleStop = () => {
+    audioRef.current.stop();
+  };
+  const Submit = async () => {
+    if (file.length === 0) {
+      alert('録音がありません。');
+      return;
+    }
+
+    const audioBlob = new Blob(file, { type: 'audio/webm' });
+    const formData = new FormData();
+    formData.append('audio', audioBlob);
+
+    try {
+      const response = await axios.post('api/upload/upload-audio', formData);
+      // setAudioUrl(response.data.url as any);
+      return response.data.url;
+      console.log('アップロード完了！URL', response.data.url, 'url');
+    } catch (error) {
+      console.error('アップロードに失敗しました:', error);
+    }
+  };
+
+  const handleAddPost = ({ desc }) => AddPost(desc, Submit);
+  const handleRemove = () => {
+    setAudioState(true);
+    setFile([]);
+  };
+
+  const handleError = () => {
+    alert('エラーです。');
+  };
+
   if (loading) {
     return (
       <div className="loader-container">
@@ -82,6 +162,28 @@ const AddPost = () => {
                 >
                   {descWatch.length}/50
                 </p>
+                <div style={{ display: 'flex' }}>
+                  <button type="button" onClick={handleStart}>
+                    録音
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleStop}
+                    disabled={audioState}
+                  >
+                    ストップ
+                  </button>
+                  <button type="button" onClick={Submit}>
+                    送信
+                  </button>
+                  <button onClick={handleRemove}>削除</button>
+                  <ReactAudioPlayer
+                    src={
+                      file.length > 0 ? URL.createObjectURL(new Blob(file)) : ''
+                    }
+                    controls
+                  />
+                </div>
                 <SPostButton
                   type="submit"
                   isText={isText}

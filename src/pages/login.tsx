@@ -158,7 +158,7 @@ const SLoginBorder = styled.div`
 `;
 const SForm = styled.form`
   width: 85%;
-  height: 60vh;
+  /* height: 60vh; */
   max-width: 400px;
   margin: 0 auto;
   padding: 40px 0px;

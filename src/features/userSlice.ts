@@ -8,6 +8,7 @@ type InitialStateUser = {
   user: User | null;
   error: boolean;
 };
+
 const initialStateUser: InitialStateUser = {
   loading: true,
   user: null,

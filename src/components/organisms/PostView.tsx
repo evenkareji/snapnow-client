@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { useSelector } from '../../redux/store';
@@ -8,19 +8,22 @@ import { useGetAuthor } from '../../hooks/useGetAuthor';
 import { useLike } from '../../hooks/useLike';
 
 import { useRouter } from 'next/router';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { useToggleFollow } from '../../hooks/useToggleFollow';
 import { Post } from '../../types';
 import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
-import 'react-loading-skeleton/dist/skeleton.css';
-import Skeleton from 'react-loading-skeleton';
 
 export const PostView: FC<{ post: Post }> = (props) => {
-  const { post } = props;
+  const { post }: any = props;
 
   const { unFollowUser, followUser } = useToggleFollow();
   const { getAuthorByPostId, user, isLoadingAuthor } = useGetAuthor();
   const router = useRouter();
+
+  const postRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const { user: loginUser, loading } = useSelector((state) => state.user);
 
   const { toggleLike, isGood } = useLike(post, loginUser);
@@ -34,12 +37,43 @@ export const PostView: FC<{ post: Post }> = (props) => {
   useEffect(() => {
     getAuthorByPostId(post);
   }, [post]);
-
   if (!loginUser) {
     return null;
   }
+  useEffect(() => {
+    const postElement = postRef.current;
+    const audioElement: any = audioRef.current;
+    const repeatAudio = () => {
+      audioElement.play();
+    };
+
+    if (audioElement) {
+      audioElement.addEventListener('ended', repeatAudio);
+    }
+    if (postElement && audioElement) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            audioElement.play();
+          } else {
+            audioElement.pause();
+          }
+        },
+        {
+          threshold: 0.5, // 50%の要素が見えた時にトリガー
+        },
+      );
+
+      observer.observe(postElement);
+
+      return () => {
+        observer.unobserve(postElement);
+      };
+    }
+    return () => {}; // Add this line
+  }, [postRef, audioRef]);
   return (
-    <PostBorder>
+    <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">
       {post.img && <SImg src={post.img} alt="" />}
 
       <SBg />
@@ -77,10 +111,14 @@ export const PostView: FC<{ post: Post }> = (props) => {
         <SDescContainer>
           <SPostArticle post={post.img}>{post.desc}</SPostArticle>
         </SDescContainer>
+        <audio ref={audioRef} controls>
+          <source src={post.audioUrl} type="audio/webm" />
+          お使いのブラウザはオーディオ要素をサポートしていません。
+        </audio>
       </SPostContent>
       <SAside>
         <LikeButton size={'25'} isGood={isGood} toggleLike={toggleLike} />
-        <HeartCount>{post.likes.length}</HeartCount>
+        <HeartCount isGood={isGood}>{post.likes.length}</HeartCount>
       </SAside>
     </PostBorder>
   );
@@ -151,7 +189,7 @@ const SAside = styled.div`
 
 const HeartCount = styled.span`
   margin-bottom: 18px;
-  color: #3d3d3d;
+  color: ${({ isGood }) => (isGood ? 'var(--accent-color)' : '#908f8f')};
 `;
 
 const PostBorder = styled.div`

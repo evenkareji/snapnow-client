@@ -30,7 +30,8 @@ const keyframesSvgCelebrate = keyframes`
 `;
 
 const HeartContainer = styled.div`
-  --heart-color: var(--accent-color);
+  --heart-color: ${({ isGood }) =>
+    isGood ? 'var(--accent-color)' : '#908f8f'};
   position: relative;
 
   width: ${({ size }) => size}px;

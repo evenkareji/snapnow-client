@@ -19,6 +19,7 @@ export type Post = {
   createdAt: string;
   updatedAt: number | null;
   img: string;
+  audioUrl: string;
 };
 
 export type Profile = {
@@ -32,6 +33,7 @@ export type AddPost = {
   userId: string;
   desc: string | undefined;
   img?: string;
+  audioUrl?: string;
 };
 export type SignInData = {
   email: string;

@@ -21,7 +21,6 @@ const SSubmit = styled.button`
   }
 `;
 
-// SubmitButton コンポーネントの実装
 const SubmitButton = ({
   children,
   ...props

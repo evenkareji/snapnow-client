@@ -17,7 +17,6 @@ const AddPost = () => {
   const [isText, setIsText] = useState(false);
   const [isLoadingSubmission, setIsLoadingSubmission] =
     useState<boolean>(false);
-  // const [audioUrl, setAudioUrl] = useState<any>();
 
   const { register, handleSubmit, watch, setValue } = useForm();
   let descWatch = watch('desc', '');
@@ -51,7 +50,7 @@ const AddPost = () => {
     event.stopPropagation();
   };
 
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState<Blob[]>([]);
   const [audioState, setAudioState] = useState(true);
   const audioRef = useRef<any>();
 
@@ -64,26 +63,31 @@ const AddPost = () => {
   }, []);
 
   const handleSuccess = (stream) => {
-    // レコーディングのインスタンスを作成
-    audioRef.current = new MediaRecorder(stream, {
-      mimeType: 'video/webm;codecs=vp9',
-    });
-    // 音声データを貯める場所
-    let chunks: any = [];
-    // 録音が終わった後のデータをまとめる
+    audioRef.current = new MediaRecorder(stream);
+    let chunks: Blob[] = [];
     audioRef.current.addEventListener('dataavailable', (event) => {
+      console.log('データが利用可能です。');
       if (event.data.size > 0) {
         chunks.push(event.data);
+        console.log('データがchunks配列に追加されました。', chunks);
       }
-      // 音声データをセット
-      setFile(chunks);
     });
-    // 録音を開始したら状態を変える
-    audioRef.current.addEventListener('start', () => setAudioState(false));
-    // 録音がストップしたらchunkを空にして、録音状態を更新
+    audioRef.current.addEventListener('start', () => {
+      console.log('録音を開始しました。');
+      setAudioState(false);
+      chunks = []; // Ensure chunks is empty at the start of recording.
+    });
     audioRef.current.addEventListener('stop', () => {
+      console.log('録音を停止しました。');
       setAudioState(true);
-      chunks = [];
+      if (chunks.length > 0) {
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+        setFile([audioBlob]); // Set file state with new blob.
+        console.log('録音が停止し、file配列が更新されました。', audioBlob);
+      } else {
+        console.log('録音が停止しましたが、chunks配列が空です。');
+      }
+      chunks = []; // Clear chunks after setting file.
     });
   };
 
@@ -93,11 +97,19 @@ const AddPost = () => {
   };
 
   // 録音停止
-  const handleStop = () => {
-    audioRef.current.stop();
-  };
+  // const handleStop = () => {
+  //   audioRef.current.stop();
+  // };
   const Submit = async () => {
+    if (audioRef.current && audioRef.current.state === 'recording') {
+      await new Promise((resolve) => {
+        audioRef.current.addEventListener('stop', resolve, { once: true });
+        audioRef.current.stop();
+      });
+    }
+
     if (file.length === 0) {
+      console.log('録音データが file 配列に存在しません。');
       alert('録音がありません。');
       return;
     }
@@ -110,17 +122,16 @@ const AddPost = () => {
       const response = await axios.post('api/upload/upload-audio', formData);
       // setAudioUrl(response.data.url as any);
       return response.data.url;
-      console.log('アップロード完了！URL', response.data.url, 'url');
     } catch (error) {
       console.error('アップロードに失敗しました:', error);
     }
   };
 
   const handleAddPost = ({ desc }) => AddPost(desc, Submit);
-  const handleRemove = () => {
-    setAudioState(true);
-    setFile([]);
-  };
+  // const handleRemove = () => {
+  //   setAudioState(true);
+  //   setFile([]);
+  // };
 
   const handleError = () => {
     alert('エラーです。');
@@ -166,17 +177,15 @@ const AddPost = () => {
                   <button type="button" onClick={handleStart}>
                     録音
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     onClick={handleStop}
                     disabled={audioState}
                   >
                     ストップ
-                  </button>
-                  <button type="button" onClick={Submit}>
-                    送信
-                  </button>
-                  <button onClick={handleRemove}>削除</button>
+                  </button> */}
+
+                  {/* <button onClick={handleRemove}>削除</button> */}
                   <ReactAudioPlayer
                     src={
                       file.length > 0 ? URL.createObjectURL(new Blob(file)) : ''

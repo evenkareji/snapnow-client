@@ -202,7 +202,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
         <audio
           style={{ display: 'none' }}
           ref={audioRef}
-          loop
+          // loop
           controls
           crossOrigin="anonymous"
           onPlay={playHandler}

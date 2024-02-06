@@ -45,7 +45,7 @@ const Login = () => {
   // 'https://snapnow-client.vercel.app/auth/google/callback',
   // '_self',
 
-  if (user && !loading) {
+  if (user && !loading && loginLoading) {
     router.push('/');
   }
 

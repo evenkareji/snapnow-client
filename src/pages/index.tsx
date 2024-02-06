@@ -1,21 +1,20 @@
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import styled from 'styled-components';
-import 'react-tabs/style/react-tabs.css'; // 必要に応じてスタイルを上書き
+import SearchIcon from '@mui/icons-material/Search';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { Post } from '../types';
+import { useRouter } from 'next/router';
+import { ReactElement, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css'; // 必要に応じてスタイルを上書き
+import styled from 'styled-components';
 import { getPosts } from '../api/getPosts';
 import { PostView } from '../components/organisms/PostView';
-import { ReactElement, useEffect, useState } from 'react';
 import Layout from '../components/templates/Layout';
-import { useDispatch } from 'react-redux';
-import { AppDispatch, useSelector } from '../redux/store';
-import { fetchInitialUser } from '../features/userSlice';
-import { ClipLoader } from 'react-spinners';
-import { useRouter } from 'next/router';
-import SearchIcon from '@mui/icons-material/Search';
+import { useSelector } from '../redux/store';
+import { Post } from '../types';
 
-import { useFollowingsPosts } from '../hooks/useFollowingsPosts';
 import HamburgerMenu from '../components/organisms/HamburgerMenu';
+import { useAuthGuard } from '../hooks/useAuthGuard';
+import { useFollowingsPosts } from '../hooks/useFollowingsPosts';
 
 export const getServerSideProps: GetServerSideProps<{
   posts: Post[];
@@ -30,33 +29,24 @@ const Home = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { user, loading } = useSelector((state) => state.user);
-  const [posts, setPosts] = useState(initialPosts); // 投稿の状態を管理
+  const [posts, setPosts] = useState(initialPosts);
   const [tabIndex, setTabIndex] = useState(1);
   const { getFollowingsPosts } = useFollowingsPosts();
 
-  const dispatch: AppDispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchInitialUser());
-  }, []);
-  useEffect(() => {
-    if (!user && !loading) {
-      router.push('/login');
-    }
-  }, [user]);
+  useAuthGuard();
 
   const fetchPosts = async () => {
     try {
       const response = await getFollowingsPosts(user?._id);
-
       setPosts(response);
     } catch (error) {
       console.error('APIの取得に失敗しました。', error);
     }
   };
 
+  // const handleTabSelect = (index,関数1,関数2) => { tabsで使い回しが可能になる
   const handleTabSelect = (index) => {
-    setTabIndex(index); // タブのインデックスを更新
+    setTabIndex(index);
     if (index === 0) {
       fetchPosts();
     } else if (index === 1) {
@@ -70,26 +60,32 @@ const Home = ({
       </div>
     );
   }
+
   return (
     <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
       <StyledTabList>
-        <HamburgerMenu
-          username={user?.username}
-          handleTabSelect={handleTabSelect}
-          tabIndex={tabIndex}
-        />
-        <StyledTab>フォロー中</StyledTab>
-        <StyledTab>今何してる？</StyledTab>
-        <SSearchPostIcon onClick={() => router.push('/search-post')} />
+        <SFlex>
+          <HamburgerMenu
+            username={user?.username}
+            handleTabSelect={handleTabSelect}
+            tabIndex={tabIndex}
+          />
+          <StyledTab>フォロー中</StyledTab>
+          <StyledTab>今何してる？</StyledTab>
+          <SSearchPostIcon onClick={() => router.push('/search-post')} />
+        </SFlex>
       </StyledTabList>
-
       <StyledTabPanel>
         <SPostMain>
           <PostBg>
             <PostSlide>
-              {posts.map((post) => (
-                <PostView post={post} key={post['_id']} />
-              ))}
+              {tabIndex === 0 && posts.length === 0 ? (
+                <SNoFollowingsMessage>
+                  フォローしているユーザーがいません。
+                </SNoFollowingsMessage>
+              ) : (
+                posts.map((post) => <PostView post={post} key={post['_id']} />)
+              )}
             </PostSlide>
           </PostBg>
         </SPostMain>
@@ -108,25 +104,44 @@ const Home = ({
     </Tabs>
   );
 };
-
-const SSearchPostIcon = styled(SearchIcon)`
-  cursor: pointer;
-`;
 const StyledTabList = styled(TabList)`
-  display: flex;
-  justify-content: space-between;
   padding: 0;
   list-style-type: none;
   position: fixed; // 位置を固定
   top: 0; // 上部に配置
   left: 0;
   right: 0;
-  width: 92%;
-  margin: 0 auto;
+  margin-top: 0;
   z-index: 1000;
   background-color: rgba(255, 255, 255, 0.6);
   height: 46px;
+
+  @media (min-width: 468px) {
+    margin-left: 20vw;
+    background-color: rgb(255, 255, 255);
+  }
+  @media (min-width: 768px) {
+    /* flex: 0.9; */
+    margin-left: 20vw;
+  }
+`;
+const SFlex = styled.div`
+  width: 92%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+`;
+
+const SNoFollowingsMessage = styled.p`
+  width: 302px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const SSearchPostIcon = styled(SearchIcon)`
+  cursor: pointer;
 `;
 
 // カスタムスタイルの Tab

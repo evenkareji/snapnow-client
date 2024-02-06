@@ -6,6 +6,8 @@ import useDeletePost from '../../hooks/useDeletePost';
 import ProfilePost from './ProfilePost';
 import { useLikesPosts } from '../../hooks/useLikesPosts';
 import { useProfilePosts } from '../../hooks/useProfilePosts';
+import PrimaryBtn from '../atoms/PrimaryBtn';
+import Link from 'next/link';
 
 export const UserPostList = ({ tabIndex, profileUser }) => {
   const [posts, setPosts] = useState<Array<Post>>([]);
@@ -30,14 +32,45 @@ export const UserPostList = ({ tabIndex, profileUser }) => {
   }, [profileUser]);
 
   return (
-    <SPersonalPost>
-      {posts.map((post) => (
-        <ProfilePost post={post} key={post._id} onDelete={handleDelete} />
-      ))}
-    </SPersonalPost>
+    <>
+      <SPersonalPost>
+        {posts.length === 0 && tabIndex === 0 ? (
+          <>
+            <SNoFollowingsMessage>コンテンツがありません</SNoFollowingsMessage>
+            <Link href="/post">
+              <a>
+                <SAddPostBtn>投稿する</SAddPostBtn>
+              </a>
+            </Link>
+          </>
+        ) : (
+          posts.map((post) => (
+            <ProfilePost post={post} key={post._id} onDelete={handleDelete} />
+          ))
+        )}
+      </SPersonalPost>
+    </>
   );
 };
 
+const SNoFollowingsMessage = styled.p`
+  text-align: center;
+  width: 302px;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const SAddPostBtn = styled(PrimaryBtn)`
+  max-width: 400px;
+  width: 80%;
+  padding: 8px 10px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  border-radius: 6px;
+  transform: translate(-50%, -50%);
+`;
 const SPersonalPost = styled.div`
   background-color: #fff;
   width: 100%;

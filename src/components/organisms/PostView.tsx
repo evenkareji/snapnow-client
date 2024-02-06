@@ -1,19 +1,16 @@
 import Link from 'next/link';
 import { FC, useEffect, useRef } from 'react';
 import { css } from '@emotion/css';
-
 import styled from 'styled-components';
 
 import { useSelector } from '../../redux/store';
-
 import { useGetAuthor } from '../../hooks/useGetAuthor';
 import { useLike } from '../../hooks/useLike';
-
 import { useRouter } from 'next/router';
-import Skeleton from 'react-loading-skeleton';
-// import { ReactP5Wrapper } from 'react-p5-wrapper';
-import 'react-loading-skeleton/dist/skeleton.css';
+
 import { useToggleFollow } from '../../hooks/useToggleFollow';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { Post } from '../../types';
 import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
@@ -154,6 +151,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
     }
     return () => {};
   }, [postRef, audioRef]);
+
   if (!loginUser) {
     return null;
   }

@@ -97,16 +97,16 @@ const AddPost = () => {
   };
 
   // 録音停止
-  // const handleStop = () => {
-  //   audioRef.current.stop();
-  // };
+  const handleStop = () => {
+    audioRef.current.stop();
+  };
   const Submit = async () => {
-    if (audioRef.current && audioRef.current.state === 'recording') {
-      await new Promise((resolve) => {
-        audioRef.current.addEventListener('stop', resolve, { once: true });
-        audioRef.current.stop();
-      });
-    }
+    // if (audioRef.current && audioRef.current.state === 'recording') {
+    //   await new Promise((resolve) => {
+    //     audioRef.current.addEventListener('stop', resolve, { once: true });
+    //     audioRef.current.stop();
+    //   });
+    // }
 
     if (file.length === 0) {
       console.log('録音データが file 配列に存在しません。');
@@ -177,13 +177,13 @@ const AddPost = () => {
                   <button type="button" onClick={handleStart}>
                     録音
                   </button>
-                  {/* <button
+                  <button
                     type="button"
                     onClick={handleStop}
                     disabled={audioState}
                   >
                     ストップ
-                  </button> */}
+                  </button>
 
                   {/* <button onClick={handleRemove}>削除</button> */}
                   <ReactAudioPlayer

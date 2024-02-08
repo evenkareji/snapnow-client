@@ -1,18 +1,20 @@
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { PulseLoader } from 'react-spinners';
+
+import ReactAudioPlayer from 'react-audio-player';
 import RingLoader from 'react-spinners/RingLoader';
 import styled from 'styled-components';
 import { TextArea } from '../../components/atoms/TextArea';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { fetchInitialUser } from '../../features/userSlice';
-import { AppDispatch, useSelector } from '../../redux/store';
-import SendIcon from '@mui/icons-material/Send';
+import ProfileHeader from '../../components/molecules/ProfileHeader';
 import { useAddPost } from '../../hooks/useAddPost';
-import ReactAudioPlayer from 'react-audio-player';
-import { PulseLoader } from 'react-spinners';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useAuthGuard } from '../../hooks/useAuthGuard';
+import { useSelector } from '../../redux/store';
 const AddPost = () => {
   const [isText, setIsText] = useState(false);
   const [isLoadingSubmission, setIsLoadingSubmission] =
@@ -27,16 +29,9 @@ const AddPost = () => {
   }, [descWatch, setIsText]);
   const { AddPost } = useAddPost(setIsLoadingSubmission);
   const router = useRouter();
-  const dispatch: AppDispatch = useDispatch();
+
   const { user, loading } = useSelector((state) => state.user);
-  useEffect(() => {
-    dispatch(fetchInitialUser());
-  }, []);
-  useEffect(() => {
-    if (!user && !loading) {
-      router.push('/login');
-    }
-  }, [user]);
+  useAuthGuard();
 
   const textLimit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const maxText = 50;
@@ -101,13 +96,6 @@ const AddPost = () => {
     audioRef.current.stop();
   };
   const Submit = async () => {
-    // if (audioRef.current && audioRef.current.state === 'recording') {
-    //   await new Promise((resolve) => {
-    //     audioRef.current.addEventListener('stop', resolve, { once: true });
-    //     audioRef.current.stop();
-    //   });
-    // }
-
     if (file.length === 0) {
       console.log('録音データが file 配列に存在しません。');
       alert('録音がありません。');
@@ -140,19 +128,22 @@ const AddPost = () => {
   if (loading) {
     return (
       <div className="loader-container">
-        <RingLoader color="#ed6103" loading={true} size={50} />{' '}
+        <RingLoader color="#ed6103" loading={true} size={50} />
       </div>
     );
   }
   return (
     <SOverlay onClick={handleOverlayClick}>
       <SPostBox onClick={handlePostBoxClick}>
+        <ProfileHeader
+          title={'音声タイトル'}
+          leftIcon={<CloseIconStyled onClick={() => router.back()} />}
+          rightIcon={<ArrowForwardIosIcon />}
+        />
         <SPostInner>
-          <SPostHeader>
-            <SArrowBox onClick={handleOverlayClick}>
-              <ArrowBackIosIcon />
-            </SArrowBox>
-          </SPostHeader>
+          {/* <SPostHeader> */}
+          {/* ArrowForwardIosIcon押したら、中身の内容を追加する 。既存のものは左上に置く*/}
+          {/* </SPostHeader> */}
           <SPostMain>
             <SLabel htmlFor="textForm">
               <SForm method="post" onSubmit={handleSubmit(handleAddPost)}>
@@ -162,7 +153,7 @@ const AddPost = () => {
                     textLimit(e);
                     setValue('desc', e.target.value);
                   }}
-                  placeholder="50文字以内で入力してください"
+                  placeholder="音声のタイトルを50文字以内で入力してください"
                   autoFocus={true}
                 ></TextArea>
                 <p
@@ -199,7 +190,7 @@ const AddPost = () => {
                   disabled={isLoadingSubmission}
                 >
                   {isLoadingSubmission ? (
-                    <PulseLoader color="#fff" size={5} />
+                    <PulseLoader color="#ed6103" size={5} />
                   ) : (
                     <SendIcon />
                   )}
@@ -260,6 +251,9 @@ const SArrowBox = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+const CloseIconStyled = styled(CloseIcon)`
+  cursor: pointer;
+`;
 const SPostMain = styled.div`
   width: 100%;
   @media (max-width: 520px) {
@@ -293,6 +287,7 @@ const SPostButton = styled.button`
   font-size: 16px;
   padding-top: 6px;
   display: block;
+  align-items: center;
   cursor: pointer;
   margin-left: auto;
   position: relative;

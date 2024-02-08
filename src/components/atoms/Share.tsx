@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import ShareButtons from './ShareButtons';
 import CloseIcon from '@mui/icons-material/Close';
-
+import ReactDOM from 'react-dom';
 const Share = ({ username }) => {
   const [showShareButtons, setShowShareButtons] = useState(false);
   const URL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/profile/${username}`;
@@ -18,24 +18,31 @@ const Share = ({ username }) => {
     setShowShareButtons(false);
   };
 
+  // OverlayとShareButtonsContainerをbody直下にレンダリングするためのPortalを返します。
+  const shareContent = showShareButtons
+    ? ReactDOM.createPortal(
+        <>
+          <Overlay show={showShareButtons} onClick={handleCloseShareButtons} />
+          <ShareButtonsContainer show={showShareButtons}>
+            <SharedContentWrapper>
+              <SharedContent>
+                <ShareHeader>
+                  <div>共有</div>
+                  <CloseIconStyled onClick={handleCloseShareButtons} />
+                </ShareHeader>
+                <ShareButtons url={URL} quote={QUOTE} />
+              </SharedContent>
+            </SharedContentWrapper>
+          </ShareButtonsContainer>
+        </>,
+        document.body,
+      )
+    : null;
+
   return (
     <>
       <ShareIconStyled onClick={handleShareClick} />
-      <Overlay show={showShareButtons} onClick={handleCloseShareButtons} />
-      <ShareButtonsContainer show={showShareButtons}>
-        <SharedContentWrapper>
-          <SharedContent>
-            <ShareHeader>
-              <div>共有</div>
-              <CloseIconStyled
-                style={{ color: 'rgba(0, 0, 0, 0.7)' }}
-                onClick={handleCloseShareButtons}
-              />
-            </ShareHeader>
-            <ShareButtons url={URL} quote={QUOTE} />
-          </SharedContent>
-        </SharedContentWrapper>
-      </ShareButtonsContainer>
+      {shareContent}
     </>
   );
 };

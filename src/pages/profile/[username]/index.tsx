@@ -19,6 +19,8 @@ import Share from '../../../components/atoms/Share';
 import { FollowToggleButton } from '../../../components/molecules/FollowToggleButton';
 import { useToggleFollow } from '../../../hooks/useToggleFollow';
 import { useAuthGuard } from '../../../hooks/useAuthGuard';
+import MenuTrigger from '../../../components/atoms/MenuTrigger';
+import useToggle from '../../../hooks/useToggle';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -38,6 +40,7 @@ const ProfilePage = ({ profileUser }) => {
   const [isPointer, setIsPointer] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState(0);
   const [showIntroduction, setShowIntroduction] = useState(false);
+  const [isToggled, toggle] = useToggle() as [boolean, () => void];
   const { followUser, unFollowUser } = useToggleFollow();
   const { user, loading } = useSelector((state) => state.user);
   const { username } = router.query;
@@ -69,6 +72,7 @@ const ProfilePage = ({ profileUser }) => {
   const toggleIntroduction = () => {
     setShowIntroduction((prev) => !prev);
   };
+
   if (loading) {
     return (
       <div className="loader-container">
@@ -79,6 +83,12 @@ const ProfilePage = ({ profileUser }) => {
 
   return (
     <SProfileBox>
+      <UserMenu
+        username={username}
+        isToggled={isToggled}
+        onClick={() => toggle()}
+      />
+
       <ProfileHeader
         title={isPointer ? 'プロフィール' : `${username}`}
         leftIcon={
@@ -90,7 +100,7 @@ const ProfilePage = ({ profileUser }) => {
         }
         rightIcon={
           isPointer ? (
-            <UserMenu username={username} />
+            <MenuTrigger onClick={() => toggle()} />
           ) : (
             <Share username={username} />
           )

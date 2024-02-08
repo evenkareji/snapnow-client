@@ -8,9 +8,11 @@ import { useLikesPosts } from '../../hooks/useLikesPosts';
 import { useProfilePosts } from '../../hooks/useProfilePosts';
 import PrimaryBtn from '../atoms/PrimaryBtn';
 import Link from 'next/link';
+import { MoonLoader } from 'react-spinners';
 
 export const UserPostList = ({ tabIndex, profileUser }) => {
   const [posts, setPosts] = useState<Array<Post>>([]);
+  const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
   const { handleDelete } = useDeletePost(setPosts);
   const { getProfilePosts } = useProfilePosts();
   const { getLikesPosts } = useLikesPosts();
@@ -20,17 +22,27 @@ export const UserPostList = ({ tabIndex, profileUser }) => {
       if (!profileUser) {
         return;
       }
+      setIsPostsLoading(true);
       if (tabIndex === 0) {
         const response = await getProfilePosts(profileUser.username);
         setPosts(response as any);
+        setIsPostsLoading(false);
       } else if (tabIndex === 1) {
         const response = await getLikesPosts(profileUser._id);
         setPosts(response);
+        setIsPostsLoading(false);
       }
     };
     fetchPosts();
   }, [profileUser]);
 
+  if (isPostsLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <MoonLoader color="#ed6103" loading={true} size={30} />
+      </div>
+    );
+  }
   return (
     <>
       <SPersonalPost>

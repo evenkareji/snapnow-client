@@ -61,7 +61,6 @@ export const PostView: FC<{ post: Post }> = (props) => {
   const playHandler = () => {
     if (!analyserRef.current) {
       const audioContext = new AudioContext();
-      console.log(audioRef.current);
 
       const src = audioContext.createMediaElementSource(audioRef.current!);
       const analyser = audioContext.createAnalyser();

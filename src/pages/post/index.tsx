@@ -121,7 +121,6 @@ const AddPost = () => {
       </div>
     );
   }
-  console.log(isRecoded);
 
   return (
     <SOverlay onClick={handleOverlayClick}>

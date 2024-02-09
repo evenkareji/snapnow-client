@@ -214,7 +214,7 @@ export const PostView: FC<{ post: Post }> = (props) => {
           <SPostArticle post={post.img}>{post.desc}</SPostArticle>
         </SDescContainer>
 
-        <div onClick={() => audioRef.current?.play()}>ミュート</div>
+        {/* <div onClick={() => audioRef.current?.play()}>ミュート</div> */}
         <audio
           style={{ display: 'none' }}
           ref={audioRef}

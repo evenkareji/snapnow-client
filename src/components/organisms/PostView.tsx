@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/css';
 import styled from 'styled-components';
 
@@ -14,7 +14,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { Post } from '../../types';
 import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
-
+import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 export const PostView: FC<{ post: Post }> = (props) => {
   const { post }: any = props;
 
@@ -22,9 +22,9 @@ export const PostView: FC<{ post: Post }> = (props) => {
   const { getAuthorByPostId, user, isLoadingAuthor } = useGetAuthor();
   const router = useRouter();
 
+  const [isPlaying, setIsPlaying] = useState(false);
   const postRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const analyserRef = useRef<AnalyserNode>();
   const animeIdRef = useRef<number>();
@@ -43,6 +43,17 @@ export const PostView: FC<{ post: Post }> = (props) => {
   useEffect(() => {
     getAuthorByPostId(post);
   }, [post]);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   /**
    * 曲を再生させたとき
@@ -157,9 +168,17 @@ export const PostView: FC<{ post: Post }> = (props) => {
   }
 
   return (
-    <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">
+    <PostBorder
+      ref={postRef}
+      id={`post-${post.id}`}
+      className="post-slide"
+      onPlay={() => setIsPlaying(true)}
+      onPause={() => setIsPlaying(false)}
+    >
       {post.img && <SImg src={post.img} alt="" />}
-
+      <CenteredContainer>
+        {isPlaying ? null : <PlayButton onClick={togglePlay} />}
+      </CenteredContainer>
       <SBg />
       <SPostContent>
         <SPostHeader>
@@ -243,6 +262,25 @@ const styles = {
     z-index: 10;
   `,
 };
+const CenteredContainer = styled.div`
+  position: absolute; // 画面全体に対して固定
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; // 必要に応じて調整
+  opacity: 0.5;
+`;
+const PlayButton = styled(PlayArrowSharpIcon)`
+  background: #bcbcbc;
+
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 8px;
+`;
 const SPostContent = styled.div`
   position: absolute;
   top: 55px;
@@ -305,6 +343,7 @@ const SAside = styled.div`
   right: 10px;
   padding: 20px;
   text-align: center;
+  z-index: 9999999;
 `;
 
 const HeartCount = styled.span`
@@ -317,7 +356,7 @@ const PostBorder = styled.div`
 
   width: 100%;
   height: 100%;
-
+  z-index: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 `;

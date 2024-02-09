@@ -17,7 +17,6 @@ const UpdatePostPage = () => {
   const router = useRouter();
   const { postId } = router.query;
   const postDesc = router.query.postDesc;
-  console.log(postId);
 
   const [isLoadingSubmission, setIsLoadingSubmission] =
     useState<boolean>(false);

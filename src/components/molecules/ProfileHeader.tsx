@@ -9,9 +9,12 @@ interface ProfileHeaderProps {
 }
 
 const SHeaderInner = styled.div`
-  text-align: center;
+  display: flex;
+  justify-content: center; // 水平方向の中央揃え
+  align-items: center;
   position: relative;
   width: 93%;
+  height: 22px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -43,6 +46,9 @@ const ProfileHeader: React.FC<
   );
 };
 const SHeaderLeftIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   left: 0px;
   top: 50%;
@@ -50,6 +56,9 @@ const SHeaderLeftIcon = styled.div`
   cursor: pointer;
 `;
 const SHeaderRightIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   right: 0px;
   top: 50%;

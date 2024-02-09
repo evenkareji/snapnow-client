@@ -18,7 +18,6 @@ const Share = ({ username }) => {
     setShowShareButtons(false);
   };
 
-  // OverlayとShareButtonsContainerをbody直下にレンダリングするためのPortalを返します。
   const shareContent = showShareButtons
     ? ReactDOM.createPortal(
         <>

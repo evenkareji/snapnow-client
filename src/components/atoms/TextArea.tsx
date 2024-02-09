@@ -10,7 +10,4 @@ export const TextArea = styled.textarea`
   height: 80%;
 
   min-height: 222px;
-  &::placeholder {
-    color: #ce936c;
-  }
 `;

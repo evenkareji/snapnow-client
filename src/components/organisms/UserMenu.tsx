@@ -3,15 +3,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../features/userSlice';
 import { AppDispatch } from '../../redux/store';
 import MenuContainer from '../atoms/MenuContainer';
-import MoreHorizIconStyled from '../atoms/MoreHorizIcon';
+
 import MenuSection from '../organisms/MenuSection';
 
-const UserMenu = ({ username }) => {
+const UserMenu = ({ username, isToggled, onClick }) => {
   const menuItems = {
     account: [
       {
@@ -49,11 +49,7 @@ const UserMenu = ({ username }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const router = useRouter();
-  const [isMenuVisible, setMenuVisible] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuVisible(!isMenuVisible);
-  };
   const logoutEvent = useCallback(async () => {
     try {
       dispatch(logout());
@@ -63,23 +59,23 @@ const UserMenu = ({ username }) => {
   }, [dispatch, router]);
   return (
     <>
-      {isMenuVisible && (
+      {isToggled && (
         <div
           style={{
             zIndex: '999',
             background: 'rgba(0, 0, 0, 0.5)',
-            position: 'fixed',
+            position: 'absolute',
             top: '0',
             left: '0',
             width: '100%',
             height: '100%',
             display: 'block',
           }}
-          onClick={toggleMenu}
+          onClick={onClick}
         />
       )}
 
-      {isMenuVisible && (
+      {isToggled && (
         <div
           style={{
             zIndex: '1000',
@@ -128,8 +124,6 @@ const UserMenu = ({ username }) => {
           </div>
         </div>
       )}
-
-      <MoreHorizIconStyled onClick={toggleMenu} />
     </>
   );
 };

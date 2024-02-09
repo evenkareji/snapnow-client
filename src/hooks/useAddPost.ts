@@ -17,6 +17,7 @@ export const useAddPost = (setIsLoadingSubmission) => {
     const audioUrl = await Submit();
     console.log(audioUrl, 'submit');
     if (!audioUrl) {
+      setIsLoadingSubmission(false);
       return console.log('audioがありませんん');
     }
 
@@ -32,6 +33,7 @@ export const useAddPost = (setIsLoadingSubmission) => {
       router.push('/');
     } catch (err) {
       console.log(err);
+      setIsLoadingSubmission(false);
     } finally {
       setIsLoadingSubmission(false);
     }

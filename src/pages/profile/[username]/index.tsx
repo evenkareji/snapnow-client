@@ -2,7 +2,6 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import styled from 'styled-components';
 import ArrowBackIosIconStyled from '../../../components/atoms/ArrowBackIcon';
@@ -13,13 +12,15 @@ import { FollowTab } from '../../../components/organisms/FollowTab';
 import UserMenu from '../../../components/organisms/UserMenu';
 import { UserPostList } from '../../../components/organisms/UserPostList';
 import Layout from '../../../components/templates/Layout';
-import { fetchInitialUser } from '../../../features/userSlice';
-import { AppDispatch, useSelector } from '../../../redux/store';
+import { useSelector } from '../../../redux/store';
 
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Share from '../../../components/atoms/Share';
 import { FollowToggleButton } from '../../../components/molecules/FollowToggleButton';
 import { useToggleFollow } from '../../../hooks/useToggleFollow';
+import { useAuthGuard } from '../../../hooks/useAuthGuard';
+import MenuTrigger from '../../../components/atoms/MenuTrigger';
+import useToggle from '../../../hooks/useToggle';
 
 export async function getServerSideProps(context) {
   const { username } = context.query;
@@ -39,24 +40,16 @@ const ProfilePage = ({ profileUser }) => {
   const [isPointer, setIsPointer] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState(0);
   const [showIntroduction, setShowIntroduction] = useState(false);
-
-  const dispatch: AppDispatch = useDispatch();
+  const [isToggled, toggle] = useToggle() as [boolean, () => void];
+  const { followUser, unFollowUser } = useToggleFollow();
   const { user, loading } = useSelector((state) => state.user);
+  const { username } = router.query;
 
-  useEffect(() => {
-    dispatch(fetchInitialUser());
-  }, []);
-
-  useEffect(() => {
-    if (!user && !loading) {
-      router.push('/login');
-    }
-  }, [user]);
+  useAuthGuard();
 
   useEffect(() => {
     setIsToPage(false);
   }, [isPointer]);
-  const { username } = router.query;
 
   useEffect(() => {
     setIsPointer(user?.username === username);
@@ -67,12 +60,10 @@ const ProfilePage = ({ profileUser }) => {
     setIsToPage((prev) => !prev);
   };
 
-  const { followUser, unFollowUser } = useToggleFollow();
-
   const followings = profileUser?.followings || [];
   const followers = profileUser?.followers || [];
   const handleTabSelect = (index) => {
-    setTabIndex(index); // タブのインデックスを更新
+    setTabIndex(index);
     if (index === 0) {
     } else if (index === 1) {
     }
@@ -81,6 +72,7 @@ const ProfilePage = ({ profileUser }) => {
   const toggleIntroduction = () => {
     setShowIntroduction((prev) => !prev);
   };
+
   if (loading) {
     return (
       <div className="loader-container">
@@ -91,6 +83,12 @@ const ProfilePage = ({ profileUser }) => {
 
   return (
     <SProfileBox>
+      <UserMenu
+        username={username}
+        isToggled={isToggled}
+        onClick={() => toggle()}
+      />
+
       <ProfileHeader
         title={isPointer ? 'プロフィール' : `${username}`}
         leftIcon={
@@ -102,7 +100,7 @@ const ProfilePage = ({ profileUser }) => {
         }
         rightIcon={
           isPointer ? (
-            <UserMenu username={username} />
+            <MenuTrigger onClick={() => toggle()} />
           ) : (
             <Share username={username} />
           )
@@ -167,6 +165,7 @@ const ProfilePage = ({ profileUser }) => {
     </SProfileBox>
   );
 };
+
 const SBox = styled.div`
   position: relative;
   display: flex;
@@ -220,6 +219,7 @@ const SArrowLeftIcon = styled(ArrowDropUpIcon)`
   transition: transform 0.3s ease-in-out;
 `;
 const StyledTabPanel = styled(TabPanel)`
+  position: relative;
   display: none;
   &.react-tabs__tab-panel--selected {
     display: block;

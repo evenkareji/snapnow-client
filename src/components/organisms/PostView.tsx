@@ -1,20 +1,20 @@
 import Link from 'next/link';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { css } from '@emotion/css';
 import styled from 'styled-components';
 
 import { useSelector } from '../../redux/store';
-
 import { useGetAuthor } from '../../hooks/useGetAuthor';
 import { useLike } from '../../hooks/useLike';
-
 import { useRouter } from 'next/router';
+
+import { useToggleFollow } from '../../hooks/useToggleFollow';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useToggleFollow } from '../../hooks/useToggleFollow';
 import { Post } from '../../types';
 import LikeButton from '../atoms/LikeButton';
 import { FollowToggleButton } from '../molecules/FollowToggleButton';
-
+import PlayArrowSharpIcon from '@mui/icons-material/PlayArrowSharp';
 export const PostView: FC<{ post: Post }> = (props) => {
   const { post }: any = props;
 
@@ -22,8 +22,14 @@ export const PostView: FC<{ post: Post }> = (props) => {
   const { getAuthorByPostId, user, isLoadingAuthor } = useGetAuthor();
   const router = useRouter();
 
+  const [isPlaying, setIsPlaying] = useState(false);
   const postRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const analyserRef = useRef<AnalyserNode>();
+  const animeIdRef = useRef<number>();
+  const volumeRef = useRef(0.05);
+
   const { user: loginUser, loading } = useSelector((state) => state.user);
 
   const { toggleLike, isGood } = useLike(post, loginUser);
@@ -37,19 +43,103 @@ export const PostView: FC<{ post: Post }> = (props) => {
   useEffect(() => {
     getAuthorByPostId(post);
   }, [post]);
-  if (!loginUser) {
-    return null;
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  /**
+   * 曲を再生させたとき
+   */
+  const playHandler = () => {
+    if (!analyserRef.current) {
+      const audioContext = new AudioContext();
+      console.log(audioRef.current);
+
+      const src = audioContext.createMediaElementSource(audioRef.current!);
+      const analyser = audioContext.createAnalyser();
+
+      src.connect(analyser);
+      analyser.connect(audioContext.destination);
+      analyser.fftSize = 256;
+      analyserRef.current = analyser;
+      audioRef.current!.volume = volumeRef.current;
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      if (!canvasRef.current) return;
+
+      canvasRef.current.width = window.innerWidth;
+      canvasRef.current.height = window.innerHeight;
+
+      const ctx = canvasRef.current.getContext('2d')!;
+      renderFrame(ctx, dataArray);
+    }
+  };
+
+  /**
+   * フレーム毎にcanvasに描画する
+   * @param ctx
+   * @param dataArray
+   */
+  function renderFrame(ctx: CanvasRenderingContext2D, dataArray: Uint8Array) {
+    const WIDTH = ctx.canvas.width;
+    const HEIGHT = ctx.canvas.height;
+    const dataLength = dataArray.length;
+    const barWidth = WIDTH / dataLength;
+    let x = 0;
+
+    analyserRef.current!.getByteFrequencyData(dataArray);
+
+    ctx.fillStyle = '#ffffff'; // 例: 黒色の背景
+    const waveAmplitude = 0; // ウェーブの振幅
+    const waveFrequency = 0.02; // ウェーブの周波数
+    const baseColor = [255, 165, 0];
+
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    for (let i = 0; i < dataLength; i++) {
+      const barHeight = dataArray[i];
+
+      const r = baseColor[0] + barHeight;
+      const g = baseColor[1] + barHeight;
+      const b = baseColor[2] + barHeight;
+
+      ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+
+      // ウェーブの高さを調整
+      const offsetY = Math.sin(i * waveFrequency) * waveAmplitude;
+
+      ctx.fillRect(x, HEIGHT / 2 + offsetY, barWidth, -barHeight);
+      ctx.fillRect(x, HEIGHT / 2 + offsetY, barWidth, barHeight);
+
+      x += barWidth + 1;
+    }
+
+    animeIdRef.current = requestAnimationFrame(() =>
+      renderFrame(ctx, dataArray),
+    );
   }
+
+  useEffect(() => {
+    return () => {
+      if (animeIdRef.current) {
+        cancelAnimationFrame(animeIdRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const postElement = postRef.current;
     const audioElement: any = audioRef.current;
-    // const repeatAudio = () => {
-    //   audioElement.play();
-    // };
-
-    // if (audioElement) {
-    //   audioElement.addEventListener('ended', repeatAudio);
-    // }
     if (postElement && audioElement) {
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -73,10 +163,22 @@ export const PostView: FC<{ post: Post }> = (props) => {
     return () => {};
   }, [postRef, audioRef]);
 
-  return (
-    <PostBorder ref={postRef} id={`post-${post.id}`} className="post-slide">
-      {post.img && <SImg src={post.img} alt="" />}
+  if (!loginUser) {
+    return null;
+  }
 
+  return (
+    <PostBorder
+      ref={postRef}
+      id={`post-${post.id}`}
+      className="post-slide"
+      onPlay={() => setIsPlaying(true)}
+      onPause={() => setIsPlaying(false)}
+    >
+      {post.img && <SImg src={post.img} alt="" />}
+      <CenteredContainer>
+        {isPlaying ? null : <PlayButton onClick={togglePlay} />}
+      </CenteredContainer>
       <SBg />
       <SPostContent>
         <SPostHeader>
@@ -113,11 +215,23 @@ export const PostView: FC<{ post: Post }> = (props) => {
           <SPostArticle post={post.img}>{post.desc}</SPostArticle>
         </SDescContainer>
 
-        <audio ref={audioRef} loop controls>
+        <div onClick={() => audioRef.current?.play()}>ミュート</div>
+        <audio
+          style={{ display: 'none' }}
+          ref={audioRef}
+          // loop
+          controls
+          crossOrigin="anonymous"
+          onPlay={playHandler}
+          onVolumeChange={() => (volumeRef.current = audioRef.current!.volume)}
+        >
           <source src={post.audioUrl} type="audio/webm" />
           お使いのブラウザはオーディオ要素をサポートしていません。
         </audio>
       </SPostContent>
+      <div className={styles.container}>
+        <canvas ref={canvasRef} className={styles.canvas} />
+      </div>
       <SAside>
         <LikeButton size={'25'} isGood={isGood} toggleLike={toggleLike} />
         <HeartCount isGood={isGood}>{post.likes.length}</HeartCount>
@@ -125,13 +239,55 @@ export const PostView: FC<{ post: Post }> = (props) => {
     </PostBorder>
   );
 };
+const styles = {
+  container: css`
+    position: absolute;
+    top: 0px;
 
+    top: 50%;
+    right: 0px;
+    width: 100%;
+    height: 80%;
+
+    z-index: 0;
+  `,
+  canvas: css`
+    width: 100%;
+    height: 50%;
+    z-index: 10;
+  `,
+  player: css`
+    position: absolute;
+    bottom: 50px;
+    z-index: 10;
+  `,
+};
+const CenteredContainer = styled.div`
+  position: absolute; // 画面全体に対して固定
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; // 必要に応じて調整
+  opacity: 0.5;
+`;
+const PlayButton = styled(PlayArrowSharpIcon)`
+  background: #bcbcbc;
+
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 8px;
+`;
 const SPostContent = styled.div`
   position: absolute;
   top: 55px;
   left: 38px;
   width: 87%;
   height: 70%;
+  z-index: 1;
 `;
 const SPostHeader = styled.header`
   display: flex;
@@ -187,6 +343,7 @@ const SAside = styled.div`
   right: 10px;
   padding: 20px;
   text-align: center;
+  z-index: 9999999;
 `;
 
 const HeartCount = styled.span`
@@ -199,7 +356,7 @@ const PostBorder = styled.div`
 
   width: 100%;
   height: 100%;
-
+  z-index: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 `;

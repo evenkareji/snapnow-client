@@ -28,8 +28,8 @@ const Recorder = ({ audioRef, file, setIsRecoded }) => {
           {isRecoding ? (
             <StopCircleIcon
               style={{
-                width: '105px',
-                height: '105px',
+                width: '91px',
+                height: '91px',
                 padding: '10px',
                 background: 'white',
                 color: 'var(--accent-color)',
@@ -39,8 +39,8 @@ const Recorder = ({ audioRef, file, setIsRecoded }) => {
           ) : (
             <MicNoneIcon
               style={{
-                width: '90px',
-                height: '90px',
+                width: '70px', // サイズを小さく調整
+                height: '70px', // サイズを小さく調整
                 padding: '10px',
                 background: 'var(--accent-color)',
                 color: 'white',
@@ -69,8 +69,8 @@ const SMicContainer = styled.div`
 const SButtonBorder = styled.button`
   all: unset; /* ブラウザのデフォルトスタイルを全て解除 */
   cursor: pointer; /* ホバー時のカーソルをポインターに設定 */
-  width: 105px;
-  height: 105px;
+  width: 90px;
+  height: 90px;
   border-radius: 100%;
   display: inline-block; /* ブロック要素として表示 */
   border: 1px solid #b7b5b2;

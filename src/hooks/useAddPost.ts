@@ -15,7 +15,7 @@ export const useAddPost = (setIsLoadingSubmission) => {
       return;
     }
     const audioUrl = await Submit();
-    console.log(audioUrl, 'submit');
+
     if (!audioUrl) {
       setIsLoadingSubmission(false);
       return console.log('audioがありませんん');

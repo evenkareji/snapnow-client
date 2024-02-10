@@ -175,9 +175,9 @@ export const PostView: FC<{ post: Post }> = (props) => {
       onPause={() => setIsPlaying(false)}
     >
       {post.img && <SImg src={post.img} alt="" />}
-      <CenteredContainer>
-        {isPlaying ? null : <PlayButton onClick={togglePlay} />}
-      </CenteredContainer>
+      {/* <CenteredContainer> */}
+      {isPlaying ? null : <PlayButton onClick={togglePlay} />}
+      {/* </CenteredContainer> */}
       <SBg />
       <SPostContent>
         <SPostHeader>
@@ -279,6 +279,11 @@ const PlayButton = styled(PlayArrowSharpIcon)`
   width: 50px !important;
   height: 50px !important;
   border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000000;
 `;
 const SPostContent = styled.div`
   position: absolute;

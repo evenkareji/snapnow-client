@@ -55,7 +55,7 @@ const Login = () => {
         <SLoginBorder>
           <SForm onSubmit={handleSubmit(loginSubmit)}>
             <SFormHead>Snapnow</SFormHead>
-            <p>メールアドレス :fsf@gmail.com</p>
+            <p>メールアドレス :test@gmail.com</p>
             <p>パスワード　　 :123456</p>
             <SEmail
               id="email"

@@ -126,7 +126,6 @@ const AddPost = () => {
     <SOverlay onClick={handleOverlayClick}>
       <SPostBox onClick={handlePostBoxClick}>
         <ProfileHeader
-          position="fixed"
           title={headerState === 'initial' ? '音声タイトルを設定' : '録音'}
           leftIcon={
             <ArrowBackIosIconStyled

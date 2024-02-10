@@ -9,7 +9,4 @@ export const TextArea = styled.textarea`
   outline: none;
   height: 80%;
   min-height: 222px;
-  &:focus {
-    font-size: 24px;
-  }
 `;

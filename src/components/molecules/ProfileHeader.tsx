@@ -24,10 +24,15 @@ const SHeader = styled.header`
   box-sizing: border-box;
   /* z-index: 9999999999; */
   border-bottom: ${({ borderBottom }) => borderBottom || '1px solid #f2f2f2'};
+  position: ${({ position }) => position || 'relative'};
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 100000000;
 `;
 const ProfileHeader: React.FC<
-  ProfileHeaderProps & { borderBottom?: string }
-> = ({ title, leftIcon, rightIcon, borderBottom }) => {
+  ProfileHeaderProps & { borderBottom?: string; position?: any }
+> = ({ title, leftIcon, rightIcon, borderBottom, position }) => {
   const renderedTitle =
     typeof title === 'string' ? (
       <h1 style={{ fontSize: '16px' }}>{title}</h1>
@@ -36,7 +41,7 @@ const ProfileHeader: React.FC<
     );
 
   return (
-    <SHeader borderBottom={borderBottom}>
+    <SHeader borderBottom={borderBottom} position={position}>
       <SHeaderInner>
         <SHeaderLeftIcon>{leftIcon}</SHeaderLeftIcon>
         {renderedTitle}

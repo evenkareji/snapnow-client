@@ -261,18 +261,18 @@ const styles = {
     z-index: 10;
   `,
 };
-const CenteredContainer = styled.div`
-  position: absolute; // 画面全体に対して固定
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100; // 必要に応じて調整
-  opacity: 0.5;
-`;
+// const CenteredContainer = styled.div`
+//   position: absolute; // 画面全体に対して固定
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   z-index: 100; // 必要に応じて調整
+//   opacity: 0.5;
+// `;
 const PlayButton = styled(PlayArrowSharpIcon)`
   background: #bcbcbc;
 
